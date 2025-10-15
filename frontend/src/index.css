@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scroll behavior */
+html, body {
+  scroll-behavior: smooth;
+}
+
+/* Landing page button styles */
+@layer components {
+  .btn-primary {
+    @apply bg-[#0038FF] text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition;
+  }
+
+  .btn-outline {
+    @apply border border-gray-300 text-[#0F1724] px-6 py-3 rounded-lg hover:bg-gray-50 transition;
+  }
+
+  .section {
+    @apply py-16 px-4;
+    /* Removed background color from section class */
+  }
+}
+
+body {
+  @apply font-sans;
+}

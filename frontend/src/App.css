@@ -1,0 +1,109 @@
+/* Add this CSS to fix the footer sections appearing in dashboard content */
+/* You can add this to your global CSS file (src/index.css) */
+
+/* Method 1: Hide footer sections that shouldn't appear in main content */
+.dashboard-layout .footer-sections,
+main .footer-links-grid,
+main .footer-product-section,
+main .footer-support-section,
+main .footer-company-section,
+main .footer-legal-section {
+  display: none !important;
+}
+
+/* Method 2: Target specific footer content by text content */
+main div:has(h3:contains("PRODUCT")),
+main div:has(h3:contains("SUPPORT")), 
+main div:has(h3:contains("COMPANY")),
+main div:has(h3:contains("LEGAL")) {
+  display: none !important;
+}
+
+/* Method 3: Hide footer grid sections within main content */
+main .grid:has(h3) {
+  display: none !important;
+}
+
+/* Method 4: Target footer by structure - adjust selectors based on your Footer component */
+main .bg-white .grid .space-y-4:has(h3) {
+  display: none !important;
+}
+
+/* Method 5: More specific targeting */
+main footer,
+main [data-footer="true"],
+main .footer-container {
+  display: none !important;
+}
+
+/* Ensure proper footer positioning at bottom */
+.dashboard-layout > .footer-wrapper {
+  margin-top: auto;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Alternative: If footer needs to be fixed */
+.app-footer-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  z-index: 10;
+  padding: 1rem;
+}
+
+/* Ensure content has space when footer is fixed */
+.main-content-with-fixed-footer {
+  padding-bottom: 120px; /* Adjust based on footer height */
+}
+
+/* Hide any grid layout with footer-like content in main area */
+main .grid:has(.space-y-4) h3 {
+  display: none !important;
+}
+
+/* Target by common footer class patterns */
+main .footer,
+main .site-footer,
+main .page-footer,
+main [class*="footer-"] {
+  display: none !important;
+}
+
+/* Responsive: Hide footer sections on mobile in main content */
+@media (max-width: 768px) {
+  main .grid .space-y-4 {
+    display: none !important;
+  }
+}
+
+/* Quick fix: Hide specific footer-like structures */
+main .bg-white:has(.grid):has(h3:contains("PRODUCT")),
+main .bg-white:has(.grid):has(h3:contains("SUPPORT")),
+main .bg-white:has(.grid):has(h3:contains("COMPANY")),
+main .bg-white:has(.grid):has(h3:contains("LEGAL")) {
+  display: none !important;
+}
+
+/* If you need to target the exact structure from your screenshot */
+main .bg-white .px-4 .py-5:has(h3) {
+  display: none !important;
+}
+
+/* Override: Make sure footer only appears at bottom of layout */
+.dashboard-layout .lg\\:pl-64 > .footer {
+  display: block !important;
+}
+
+/* Clean up: Ensure main content area doesn't have footer styling */
+main {
+  background: #f9fafb; /* bg-gray-50 */
+}
+
+main .bg-white:not(.card):not(.panel):not(.modal) {
+  /* Allow white cards/panels but hide footer-like white sections */
+  background: transparent !important;
+}
