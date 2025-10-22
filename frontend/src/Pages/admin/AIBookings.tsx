@@ -67,41 +67,51 @@ export const AIBookings: React.FC = () => {
   })
 
   // Confirm booking mutation with customer notification feedback
-  const confirmBookingMutation = useMutation({
-    mutationFn: async ({ bookingId, notes }: { bookingId: string, notes: string }) => {
-      const response = await api.patch(`/jobs/ai-bookings/${bookingId}/confirm?notes=${encodeURIComponent(notes)}`)
-      return response.data
-    },
-    onSuccess: (data) => {
-      if (data.email_sent) {
-        toast.success(`Booking confirmed and customer notified via email!`, {
-          duration: 4000,
-        })
-      } else {
-        toast.success('Booking confirmed successfully!', {
-          duration: 4000,
-        })
-        if (data.customer_email) {
-          toast.error('Failed to send notification email to customer', {
-            duration: 3000,
-          })
-        } else {
-          toast('No customer email available for notification', {
-            duration: 3000,
-            icon: '⚠️'
-          })
-        }
-      }
-      queryClient.invalidateQueries(['ai-bookings'])
-      setShowConfirmModal(false)
-      setSelectedBooking(null)
-      setConfirmationNotes('')
-    },
-    onError: (error: any) => {
-      console.error('Confirm booking error:', error)
-      toast.error('Failed to confirm booking')
+ const confirmBookingMutation = useMutation({
+  mutationFn: async ({ bookingId, notes }: { bookingId: string, notes: string }) => {
+    // 1. Update booking status
+    await api.patch(`/jobs/${bookingId}`, {
+      status: 'confirmed',
+      notes: [{
+        content: notes || "Booking confirmed by admin",
+        created_at: new Date().toISOString(),
+        created_by: "admin"
+      }]
+    })
+    
+    // 2. Send confirmation email
+    try {
+      const emailResponse = await api.post(`/jobs/${bookingId}/send-confirmation-email`, {
+        admin_notes: notes
+      })
+      return emailResponse.data
+    } catch (emailError) {
+      console.error('Email error:', emailError)
+      return { email_sent: false, error: 'Email failed' }
     }
-  })
+  },
+  onSuccess: (data) => {
+    if (data.email_sent) {
+      toast.success(`✅ Booking confirmed! Email sent to ${data.customer_email}`, {
+        duration: 5000,
+        icon: '📧'
+      })
+    } else {
+      toast.success('✅ Booking confirmed (email unavailable)', {
+        duration: 4000
+      })
+    }
+    
+    queryClient.invalidateQueries(['ai-bookings'])
+    setShowConfirmModal(false)
+    setSelectedBooking(null)
+    setConfirmationNotes('')
+  },
+  onError: (error: any) => {
+    console.error('Confirm booking error:', error)
+    toast.error('❌ Failed to confirm booking')
+  }
+})
 
   const handleConfirmBooking = (booking: AIBooking) => {
     setSelectedBooking(booking)
@@ -209,9 +219,12 @@ export const AIBookings: React.FC = () => {
                     <div className="min-w-0 flex-1">
                       {/* Service Type and Status */}
                       <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-2 sm:space-y-0">
-                        <h3 className="text-lg font-medium text-gray-900 truncate">
-                          {booking.service_type}
-                        </h3>
+                       {/* // ✅ CORRECT - Handle both string and object: */}
+<h3 className="text-lg font-medium text-gray-900 truncate">
+  {typeof booking.service_type === 'string' 
+    ? booking.service_type 
+    : booking.service_type?.name || 'Service'}
+</h3>
                         <div className="flex flex-wrap gap-2">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             booking.status === 'scheduled' 

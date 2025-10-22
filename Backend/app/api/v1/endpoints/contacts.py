@@ -1,4 +1,4 @@
-# backend/app/api/v1/endpoints/contacts.py - FIXED ROUTE ORDER
+# backend/app/api/v1/endpoints/contacts.py - FIXED FILTERING
 
 from typing import Any, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -58,8 +58,6 @@ def convert_objectid_to_str(document):
     return document
 
 # ✅ ROUTE ORDER: SPECIFIC ROUTES FIRST, GENERIC ROUTES LAST
-
-
 
 # Test endpoint with auth
 @router.get("/test-with-auth")
@@ -177,22 +175,31 @@ async def read_contacts(
     limit: int = Query(default=100, le=100),
     type: Optional[str] = Query(None, description="Filter contacts by type"),
     search: Optional[str] = None,
-    tag: Optional[str] = None
+    tag: Optional[str] = None,
+    # 👇 ADD THIS LINE - Status parameter was missing!
+    status: Optional[str] = Query(None, description="Filter contacts by status")
 ) -> List[dict]:
     """Retrieve contacts from database"""
     try:
         from app.core.logger import get_logger
         logger = get_logger("endpoints.contacts.read")
         
-        logger.info(f"📞 GET /contacts - type: {type}, search: {search}")
+        logger.info(f"📞 GET /contacts - type: {type}, search: {search}, status: {status}")
         
-        # Build query filter
-        # query_filter = {"company_id": ObjectId(current_user["company_id"])}
-        query_filter = {} # TEMPORARILY DISABLE COMPANY FILTER FOR DEMO PURPOSES
-        # Add type filter (this is what JobScheduler.tsx expects)
+        # ✅ FIX 1: RE-ENABLE COMPANY FILTER
+        query_filter = {"company_id": ObjectId(current_user["company_id"])}
+        
+        # ✅ ADD STATUS FILTER
+        if status:
+            query_filter["status"] = status
+            logger.info(f"📞 Filtering by status: {status}")
+        
+        # ✅ FIX 2: USE CORRECT FIELD NAME "type" instead of "contact_type"
         if type:
-            query_filter["contact_type"] = type  
+            query_filter["type"] = type
+            logger.info(f"📞 Filtering by type: {type}")
         
+        # Add search filter
         if search:
             query_filter["$or"] = [
                 {"first_name": {"$regex": search, "$options": "i"}},
@@ -200,9 +207,14 @@ async def read_contacts(
                 {"email": {"$regex": search, "$options": "i"}},
                 {"phone": {"$regex": search, "$options": "i"}}
             ]
+            logger.info(f"📞 Searching with query: {search}")
             
+        # Add tag filter
         if tag:
             query_filter["tags"] = {"$in": [tag]}
+            logger.info(f"📞 Filtering by tag: {tag}")
+
+        logger.info(f"📞 Final query filter: {query_filter}")
 
         # Query database
         cursor = db.contacts.find(query_filter).skip(skip).limit(limit)

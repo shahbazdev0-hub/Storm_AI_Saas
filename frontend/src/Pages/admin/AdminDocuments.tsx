@@ -3,16 +3,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   DocumentTextIcon,
   MagnifyingGlassIcon,
-  FunnelIcon,
   ArrowDownTrayIcon,
-  CalendarIcon,
   DocumentIcon,
   PhotoIcon,
-  FilmIcon,
-  ArchiveBoxIcon,
   ExclamationTriangleIcon,
   CheckCircleIcon,
-  PlusIcon,
   PencilIcon,
   TrashIcon,
   ArrowUpTrayIcon,
@@ -33,16 +28,15 @@ interface Document {
   file_size: number
   mime_type: string
   status: string
-  customer_id?: string
-  uploaded_by: string
+  customer_email?: string
+  uploaded_by_email: string
   requires_signature: boolean
   is_signed: boolean
   signed_at?: string
   approval_required: boolean
-  approved_by?: string
+  approved_by_email?: string
   approved_at?: string
   rejection_reason?: string
-  expires_at?: string
   created_at: string
   updated_at: string
   tags: string[]
@@ -50,9 +44,8 @@ interface Document {
 
 interface Customer {
   id: string
-  first_name: string
-  last_name: string
-  email?: string
+  email: string
+  name: string
 }
 
 export default function AdminDocuments() {
@@ -60,16 +53,16 @@ export default function AdminDocuments() {
   const [selectedType, setSelectedType] = useState<string>('all')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [selectedDirection, setSelectedDirection] = useState<string>('all')
-  const [selectedCustomer, setSelectedCustomer] = useState<string>('all')
+  const [selectedCustomerEmail, setSelectedCustomerEmail] = useState<string>('all')
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [showApprovalModal, setShowApprovalModal] = useState<Document | null>(null)
   const [rejectionReason, setRejectionReason] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const queryClient = useQueryClient()
 
-  // ✅ FIXED: Use /documents endpoint instead of /customers
-  const { data: documentsData, isLoading: documentsLoading, error: documentsError } = useQuery({
-    queryKey: ['admin-documents', searchTerm, selectedType, selectedStatus, selectedDirection, selectedCustomer],
+  // ✅ SIMPLE: Fetch documents with customer emails from documents
+  const { data: documentsData, isLoading, error } = useQuery({
+    queryKey: ['admin-documents', searchTerm, selectedType, selectedStatus, selectedDirection, selectedCustomerEmail],
     queryFn: async () => {
       const params = new URLSearchParams()
       
@@ -77,36 +70,23 @@ export default function AdminDocuments() {
       if (selectedType !== 'all') params.append('document_type', selectedType)
       if (selectedStatus !== 'all') params.append('status', selectedStatus)
       if (selectedDirection !== 'all') params.append('direction', selectedDirection)
-      if (selectedCustomer !== 'all') params.append('customer_id', selectedCustomer)
+      if (selectedCustomerEmail !== 'all') params.append('customer_email', selectedCustomerEmail)
       
       const response = await api.get(`/documents?${params.toString()}`)
       return response.data
     },
-    refetchOnWindowFocus: false,
-  })
-
-  // ✅ FIXED: Use correct endpoint for customers
-  const { data: customers = [], isLoading: customersLoading } = useQuery({
-    queryKey: ['customers'],
-    queryFn: async () => {
-      const res = await api.get('/contacts/')
-      return Array.isArray(res.data) ? res.data : res.data?.contacts || []
-    },
-    refetchOnWindowFocus: false,
   })
 
   const documents = documentsData?.documents || []
   const documentTypes = documentsData?.document_types || []
   const statuses = documentsData?.statuses || []
   const directions = documentsData?.directions || []
+  const customers = documentsData?.customers || [] // Simple list with emails
 
-  // Upload mutation
   const uploadMutation = useMutation({
     mutationFn: async (formData: FormData) => {
       const response = await api.post('/documents/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
       return response.data
     },
@@ -114,22 +94,15 @@ export default function AdminDocuments() {
       queryClient.invalidateQueries({ queryKey: ['admin-documents'] })
       setShowUploadModal(false)
       toast.success('Document uploaded successfully!')
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
+      if (fileInputRef.current) fileInputRef.current.value = ''
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.detail || 'Failed to upload document')
     },
   })
 
-  // Approval mutation
   const approvalMutation = useMutation({
-    mutationFn: async ({ documentId, status, rejectionReason }: {
-      documentId: string
-      status: string
-      rejectionReason?: string
-    }) => {
+    mutationFn: async ({ documentId, status, rejectionReason }: any) => {
       const response = await api.put(`/documents/${documentId}/approve`, {
         status,
         rejection_reason: rejectionReason
@@ -147,7 +120,6 @@ export default function AdminDocuments() {
     },
   })
 
-  // Delete mutation
   const deleteMutation = useMutation({
     mutationFn: async (documentId: string) => {
       await api.delete(`/documents/${documentId}`)
@@ -161,17 +133,12 @@ export default function AdminDocuments() {
     },
   })
 
-  // Helper functions
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'approved':
-        return 'bg-green-100 text-green-800'
-      case 'rejected':
-        return 'bg-red-100 text-red-800'
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800'
-      default:
-        return 'bg-gray-100 text-gray-800'
+      case 'approved': return 'bg-green-100 text-green-800'
+      case 'rejected': return 'bg-red-100 text-red-800'
+      case 'pending': return 'bg-yellow-100 text-yellow-800'
+      default: return 'bg-gray-100 text-gray-800'
     }
   }
 
@@ -203,61 +170,19 @@ export default function AdminDocuments() {
     })
   }
 
-  const getCustomerName = (customerId?: string) => {
-    if (!customerId) return 'N/A'
-    const customer = customers.find((c: Customer) => c.id === customerId)
-    return customer ? `${customer.first_name} ${customer.last_name}` : 'Unknown Customer'
-  }
-
-  // ✅ FIXED: Proper file URL handling without double /v1
-  const getFileUrl = (doc: Document, download: boolean = false): string => {
-    if (!doc.file_url) return '';
-    
-    // If it's already a full URL, use it directly
-    if (doc.file_url.startsWith('http')) {
-      return download ? `${doc.file_url}?download=true` : doc.file_url;
-    }
-    
-    // Remove any leading slashes to avoid double slashes
-    const cleanUrl = doc.file_url.replace(/^\//, '');
-    
-    // Construct the proper URL
-    let url = '';
-    if (cleanUrl.startsWith('api/')) {
-      // If it already starts with api/, use it directly
-      url = `/${cleanUrl}`;
-    } else {
-      // Otherwise, construct the proper API path
-      url = `/api/v1/${cleanUrl}`;
-    }
-    
-    return download ? `${url}?download=true` : url;
-  };
-
-  // ✅ FIXED: Proper download handling
   const handleDownload = async (doc: Document) => {
     try {
-      const downloadUrl = getFileUrl(doc, true);
-      
-      if (!downloadUrl) {
-        toast.error('No file available for download');
-        return;
-      }
-      
-      // Create a temporary anchor element for download
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = doc.file_name || `document_${doc.id}`;
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
+      const link = document.createElement('a')
+      link.href = `/api/v1/documents/${doc.id}/file?download=true`
+      link.download = doc.file_name
+      link.target = '_blank'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     } catch (error) {
-      console.error('Download error:', error);
-      toast.error('Failed to download document');
+      toast.error('Failed to download document')
     }
-  };
+  }
 
   const handleUpload = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -265,13 +190,12 @@ export default function AdminDocuments() {
     uploadMutation.mutate(formData)
   }
 
-  const handleApproval = (status: string, rejectionReason?: string) => {
+  const handleApproval = (status: string) => {
     if (!showApprovalModal) return
-    
     approvalMutation.mutate({
       documentId: showApprovalModal.id,
       status,
-      rejectionReason
+      rejectionReason: status === 'rejected' ? rejectionReason : undefined
     })
   }
 
@@ -281,15 +205,7 @@ export default function AdminDocuments() {
     }
   }
 
-  const isExpiringSoon = (expiresAt?: string) => {
-    if (!expiresAt) return false
-    const expDate = new Date(expiresAt)
-    const now = new Date()
-    const diffDays = Math.ceil((expDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-    return diffDays <= 7 && diffDays > 0
-  }
-
-  if (documentsLoading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -297,15 +213,13 @@ export default function AdminDocuments() {
     )
   }
 
-  if (documentsError) {
+  if (error) {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-center">
           <ExclamationTriangleIcon className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">Error Loading Documents</h3>
-          <p className="text-gray-600">
-            Failed to load documents. Please try again later.
-          </p>
+          <p className="text-gray-600">Failed to load documents. Please try again later.</p>
         </div>
       </div>
     )
@@ -317,14 +231,13 @@ export default function AdminDocuments() {
         <div className="sm:flex-auto">
           <h1 className="text-2xl font-semibold text-gray-900">Document Management</h1>
           <p className="mt-2 text-sm text-gray-700">
-            Manage all documents exchanged between admin and customers.
+            Manage all documents exchanged with customers.
           </p>
         </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+        <div className="mt-4 sm:mt-0 sm:ml-16">
           <button
-            type="button"
             onClick={() => setShowUploadModal(true)}
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto"
+            className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
           >
             <ArrowUpTrayIcon className="h-4 w-4 mr-2" />
             Upload Document
@@ -334,8 +247,7 @@ export default function AdminDocuments() {
 
       {/* Filters */}
       <div className="bg-white shadow rounded-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-          {/* Search */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="lg:col-span-2">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -344,74 +256,49 @@ export default function AdminDocuments() {
                 placeholder="Search documents..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
               />
             </div>
           </div>
 
-          {/* Document Type Filter */}
-          <div>
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="all">All Types</option>
-              {documentTypes.map((type: string) => (
-                <option key={type} value={type}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="all">All Types</option>
+            {documentTypes.map((type: string) => (
+              <option key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </option>
+            ))}
+          </select>
 
-          {/* Status Filter */}
-          <div>
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="all">All Statuses</option>
-              {statuses.map((status: string) => (
-                <option key={status} value={status}>
-                  {status.charAt(0).toUpperCase() + status.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="all">All Statuses</option>
+            {statuses.map((status: string) => (
+              <option key={status} value={status}>
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </option>
+            ))}
+          </select>
 
-          {/* Direction Filter */}
-          <div>
-            <select
-              value={selectedDirection}
-              onChange={(e) => setSelectedDirection(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="all">All Directions</option>
-              {directions.map((direction: string) => (
-                <option key={direction} value={direction}>
-                  {getDirectionLabel(direction)}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Customer Filter */}
-          <div>
-            <select
-              value={selectedCustomer}
-              onChange={(e) => setSelectedCustomer(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="all">All Customers</option>
-              {customers.map((customer: Customer) => (
-                <option key={customer.id} value={customer.id}>
-                  {customer.first_name} {customer.last_name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            value={selectedCustomerEmail}
+            onChange={(e) => setSelectedCustomerEmail(e.target.value)}
+            className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="all">All Customers</option>
+            {customers.map((customer: Customer) => (
+              <option key={customer.email} value={customer.email}>
+                {customer.name} ({customer.email})
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -422,138 +309,78 @@ export default function AdminDocuments() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Document
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Customer
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Type & Direction
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Info
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Document</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Customer</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {documents.map((document: Document) => (
-                  <tr key={document.id} className="hover:bg-gray-50">
+                {documents.map((doc: Document) => (
+                  <tr key={doc.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-shrink-0">
-                          {document.mime_type?.startsWith('image/') ? (
-                            <PhotoIcon className="h-8 w-8 text-green-500" />
-                          ) : document.mime_type?.includes('pdf') ? (
-                            <DocumentIcon className="h-8 w-8 text-red-500" />
-                          ) : (
-                            <DocumentTextIcon className="h-8 w-8 text-blue-500" />
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {document.title}
-                          </p>
-                          <p className="text-sm text-gray-500 truncate">
-                            {document.file_name}
-                          </p>
-                          {document.description && (
-                            <p className="text-xs text-gray-400 mt-1 truncate">
-                              {document.description}
-                            </p>
+                      <div className="flex items-center space-x-3">
+                        {doc.mime_type?.startsWith('image/') ? (
+                          <PhotoIcon className="h-8 w-8 text-green-500" />
+                        ) : doc.mime_type?.includes('pdf') ? (
+                          <DocumentIcon className="h-8 w-8 text-red-500" />
+                        ) : (
+                          <DocumentTextIcon className="h-8 w-8 text-blue-500" />
+                        )}
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{doc.title}</p>
+                          <p className="text-sm text-gray-500">{doc.file_name}</p>
+                          {doc.description && (
+                            <p className="text-xs text-gray-400 mt-1">{doc.description}</p>
                           )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <UserIcon className="h-4 w-4 text-gray-400 mr-2" />
-                        {getCustomerName(document.customer_id)}
+                        <span className="text-sm text-gray-900">{doc.uploaded_by_email}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="space-y-1">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTypeBadgeColor(document.document_type)}`}>
-                          {document.document_type}
-                        </span>
-                        <div className="text-xs text-gray-500">
-                          {getDirectionLabel(document.direction)}
-                        </div>
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTypeBadgeColor(doc.document_type)}`}>
+                        {doc.document_type}
+                      </span>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {getDirectionLabel(doc.direction)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="space-y-2">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(document.status)}`}>
-                          {document.status}
-                        </span>
-                        {document.requires_signature && (
-                          <div className="flex items-center text-xs text-yellow-600">
-                            <PencilIcon className="h-3 w-3 mr-1" />
-                            {document.is_signed ? 'Signed' : 'Signature Required'}
-                          </div>
-                        )}
-                        {document.expires_at && isExpiringSoon(document.expires_at) && (
-                          <div className="flex items-center text-xs text-red-600">
-                            <ExclamationTriangleIcon className="h-3 w-3 mr-1" />
-                            Expiring Soon
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="space-y-1">
-                        <div>{formatFileSize(document.file_size)}</div>
-                        <div className="text-xs">{document.uploaded_by}</div>
-                        {document.tags && document.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {document.tags.slice(0, 2).map((tag: string) => (
-                              <span key={tag} className="inline-flex px-1.5 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
-                                {tag}
-                              </span>
-                            ))}
-                            {document.tags.length > 2 && (
-                              <span className="text-xs text-gray-400">
-                                +{document.tags.length - 2} more
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex items-center">
-                        <ClockIcon className="h-4 w-4 text-gray-400 mr-1" />
-                        <div>
-                          <div>{formatDate(document.created_at)}</div>
-                          {document.approved_at && (
-                            <div className="text-xs text-green-600">
-                              Approved: {formatDate(document.approved_at)}
-                            </div>
-                          )}
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(doc.status)}`}>
+                        {doc.status}
+                      </span>
+                      {doc.requires_signature && (
+                        <div className="flex items-center text-xs text-yellow-600 mt-1">
+                          <PencilIcon className="h-3 w-3 mr-1" />
+                          {doc.is_signed ? 'Signed' : 'Needs Signature'}
                         </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        <div>{formatDate(doc.created_at)}</div>
+                        <div className="text-xs">{formatFileSize(doc.file_size)}</div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex justify-end space-x-2">
                         <button
-                          onClick={() => handleDownload(document)}
+                          onClick={() => handleDownload(doc)}
                           className="text-green-600 hover:text-green-900"
                           title="Download"
                         >
                           <ArrowDownTrayIcon className="h-4 w-4" />
                         </button>
-                        {document.approval_required && document.status === 'pending' && (
+                        {doc.approval_required && doc.status === 'pending' && (
                           <button
-                            onClick={() => setShowApprovalModal(document)}
+                            onClick={() => setShowApprovalModal(doc)}
                             className="text-yellow-600 hover:text-yellow-900"
                             title="Approve/Reject"
                           >
@@ -561,7 +388,7 @@ export default function AdminDocuments() {
                           </button>
                         )}
                         <button
-                          onClick={() => handleDelete(document.id)}
+                          onClick={() => handleDelete(doc.id)}
                           className="text-red-600 hover:text-red-900"
                           title="Delete"
                         >
@@ -575,17 +402,15 @@ export default function AdminDocuments() {
             </table>
           </div>
         ) : (
-          <div className="bg-white shadow rounded-lg p-12 text-center">
+          <div className="p-12 text-center">
             <DocumentTextIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No Documents Found</h3>
             <p className="text-gray-600 mb-4">
-              {searchTerm || selectedType !== 'all' || selectedStatus !== 'all' || selectedDirection !== 'all' || selectedCustomer !== 'all'
-                ? "No documents match your current filters."
-                : "No documents have been uploaded yet."}
+              {searchTerm || selectedType !== 'all' ? "No documents match your filters." : "No documents uploaded yet."}
             </p>
             <button
               onClick={() => setShowUploadModal(true)}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               <ArrowUpTrayIcon className="h-4 w-4 mr-2" />
               Upload First Document
@@ -597,131 +422,89 @@ export default function AdminDocuments() {
       {/* Upload Modal */}
       {showUploadModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" onClick={() => setShowUploadModal(false)}>
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div className="flex items-center justify-center min-h-screen px-4">
+            <div className="fixed inset-0 bg-gray-500 opacity-75" onClick={() => setShowUploadModal(false)}></div>
+            <div className="relative bg-white rounded-lg shadow-xl max-w-lg w-full">
               <form onSubmit={handleUpload}>
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">
-                        Upload Document
-                      </h3>
-                      
-                      <div className="space-y-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            File
-                          </label>
-                          <input
-                            ref={fileInputRef}
-                            type="file"
-                            name="file"
-                            required
-                            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Title
-                          </label>
-                          <input
-                            type="text"
-                            name="title"
-                            required
-                            className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Document title"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Description
-                          </label>
-                          <textarea
-                            name="description"
-                            rows={3}
-                            className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Optional description"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Document Type
-                          </label>
-                          <select
-                            name="document_type"
-                            className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                          >
-                            <option value="general">General</option>
-                            <option value="agreement">Agreement</option>
-                            <option value="contract">Contract</option>
-                            <option value="invoice">Invoice</option>
-                            <option value="receipt">Receipt</option>
-                            <option value="id_card">ID Card</option>
-                          </select>
-                        </div>
-                        
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Customer
-                          </label>
-                          <select
-                            name="customer_id"
-                            className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                          >
-                            <option value="">Select Customer (Optional)</option>
-                            {customers.map((customer: Customer) => (
-                              <option key={customer.id} value={customer.id}>
-                                {customer.first_name} {customer.last_name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        
-                        <div className="flex items-center space-x-4">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              name="requires_signature"
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                            />
-                            <span className="ml-2 text-sm text-gray-700">Requires Signature</span>
-                          </label>
-                          
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              name="approval_required"
-                              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                            />
-                            <span className="ml-2 text-sm text-gray-700">Requires Approval</span>
-                          </label>
-                        </div>
-                      </div>
+                <div className="px-6 py-4">
+                  <h3 className="text-lg font-medium text-gray-900 mb-4">Upload Document</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">File</label>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        name="file"
+                        required
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                      <input
+                        type="text"
+                        name="title"
+                        required
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        placeholder="Document title"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                      <textarea
+                        name="description"
+                        rows={3}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        placeholder="Optional description"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                      <select name="document_type" className="block w-full px-3 py-2 border border-gray-300 rounded-md">
+                        <option value="general">General</option>
+                        <option value="agreement">Agreement</option>
+                        <option value="contract">Contract</option>
+                        <option value="invoice">Invoice</option>
+                        <option value="receipt">Receipt</option>
+                        <option value="id_card">ID Card</option>
+                        <option value="permit">Permit</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Customer Email (Optional)</label>
+                      <input
+                        type="email"
+                        name="customer_email"
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        placeholder="customer@email.com"
+                      />
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <label className="flex items-center">
+                        <input type="checkbox" name="requires_signature" className="h-4 w-4 text-blue-600 rounded" />
+                        <span className="ml-2 text-sm text-gray-700">Requires Signature</span>
+                      </label>
+                      <label className="flex items-center">
+                        <input type="checkbox" name="approval_required" className="h-4 w-4 text-blue-600 rounded" />
+                        <span className="ml-2 text-sm text-gray-700">Requires Approval</span>
+                      </label>
                     </div>
                   </div>
                 </div>
-                
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="submit"
-                    disabled={uploadMutation.isPending}
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
-                  >
-                    {uploadMutation.isPending ? 'Uploading...' : 'Upload'}
-                  </button>
+                <div className="bg-gray-50 px-6 py-3 flex justify-end space-x-3">
                   <button
                     type="button"
                     onClick={() => setShowUploadModal(false)}
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
                   >
                     Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={uploadMutation.isPending}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {uploadMutation.isPending ? 'Uploading...' : 'Upload'}
                   </button>
                 </div>
               </form>
@@ -733,63 +516,49 @@ export default function AdminDocuments() {
       {/* Approval Modal */}
       {showApprovalModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" onClick={() => setShowApprovalModal(null)}>
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
-                      Approve Document: {showApprovalModal.title}
-                    </h3>
-                    
-                    <div className="space-y-4">
-                      <div>
-                        <p className="text-sm text-gray-600">
-                          Review this document and choose to approve or reject it.
-                        </p>
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Rejection Reason (if rejecting)
-                        </label>
-                        <textarea
-                          value={rejectionReason}
-                          onChange={(e) => setRejectionReason(e.target.value)}
-                          rows={3}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Provide a reason if rejecting this document..."
-                        />
-                      </div>
-                    </div>
+          <div className="flex items-center justify-center min-h-screen px-4">
+            <div className="fixed inset-0 bg-gray-500 opacity-75" onClick={() => setShowApprovalModal(null)}></div>
+            <div className="relative bg-white rounded-lg shadow-xl max-w-lg w-full">
+              <div className="px-6 py-4">
+                <h3 className="text-lg font-medium text-gray-900 mb-4">
+                  Approve Document: {showApprovalModal.title}
+                </h3>
+                <div className="space-y-4">
+                  <p className="text-sm text-gray-600">Review this document and approve or reject it.</p>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Rejection Reason (if rejecting)
+                    </label>
+                    <textarea
+                      value={rejectionReason}
+                      onChange={(e) => setRejectionReason(e.target.value)}
+                      rows={3}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                      placeholder="Provide a reason if rejecting..."
+                    />
                   </div>
                 </div>
               </div>
-              
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <div className="bg-gray-50 px-6 py-3 flex justify-end space-x-3">
                 <button
-                  onClick={() => handleApproval('approved')}
-                  disabled={approvalMutation.isPending}
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                  onClick={() => setShowApprovalModal(null)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
                 >
-                  {approvalMutation.isPending ? 'Processing...' : 'Approve'}
+                  Cancel
                 </button>
                 <button
-                  onClick={() => handleApproval('rejected', rejectionReason)}
-                  disabled={approvalMutation.isPending || (!rejectionReason.trim())}
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                  onClick={() => handleApproval('rejected')}
+                  disabled={approvalMutation.isPending || !rejectionReason.trim()}
+                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50"
                 >
                   {approvalMutation.isPending ? 'Processing...' : 'Reject'}
                 </button>
                 <button
-                  onClick={() => setShowApprovalModal(null)}
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={() => handleApproval('approved')}
+                  disabled={approvalMutation.isPending}
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50"
                 >
-                  Cancel
+                  {approvalMutation.isPending ? 'Processing...' : 'Approve'}
                 </button>
               </div>
             </div>

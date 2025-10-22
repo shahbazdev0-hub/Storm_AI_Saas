@@ -13,7 +13,6 @@ from app.services import invoice_service  # <-- make sure __init__.py imports cr
 
 router = APIRouter()
 
-
 # ---------- LIST ----------
 @router.get("/", response_model=Dict[str, Any])
 async def list_invoices(
@@ -43,13 +42,33 @@ async def list_invoices(
         pages = max(1, (total + size - 1) // size)
         skip = (page - 1) * size
 
-        cursor = (
-            db.invoices.find(query)
-            .sort("created_at", -1)
-            .skip(skip)
-            .limit(size)
-        )
-        rows = await cursor.to_list(length=size)
+        # ✅ USE AGGREGATION PIPELINE TO JOIN CUSTOMER DATA
+        pipeline = [
+            {"$match": query},
+            {"$sort": {"created_at": -1}},
+            {"$skip": skip},
+            {"$limit": size},
+            # ✅ Join with users collection to get customer info
+            {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "customer_id",
+                    "foreignField": "_id",
+                    "as": "customer_info"
+                }
+            },
+            # ✅ Also join with contacts collection as fallback
+            {
+                "$lookup": {
+                    "from": "contacts",
+                    "localField": "contact_id",
+                    "foreignField": "_id",
+                    "as": "contact_info"
+                }
+            }
+        ]
+        
+        rows = await db.invoices.aggregate(pipeline).to_list(length=size)
 
         # JSON-safe formatting
         def _to_str(v): return str(v) if isinstance(v, ObjectId) else v
@@ -57,12 +76,34 @@ async def list_invoices(
 
         data = []
         for r in rows:
+            # ✅ GET CUSTOMER NAME FROM LOOKUP
+            customer_name = "Unknown Customer"
+            
+            # Try to get from users collection first
+            if r.get("customer_info") and len(r["customer_info"]) > 0:
+                customer = r["customer_info"][0]
+                first_name = customer.get("first_name", "")
+                last_name = customer.get("last_name", "")
+                customer_name = f"{first_name} {last_name}".strip()
+                if not customer_name:
+                    customer_name = customer.get("email", "Unknown Customer")
+            
+            # Fallback to contacts collection
+            elif r.get("contact_info") and len(r["contact_info"]) > 0:
+                contact = r["contact_info"][0]
+                first_name = contact.get("first_name", "")
+                last_name = contact.get("last_name", "")
+                customer_name = f"{first_name} {last_name}".strip()
+                if not customer_name:
+                    customer_name = contact.get("name", contact.get("email", "Unknown Customer"))
+            
             data.append({
                 "id": str(r["_id"]),
                 "company_id": _to_str(r.get("company_id")),
                 "customer_id": _to_str(r.get("customer_id")),
                 "contact_id": _to_str(r.get("contact_id")),
                 "created_by": _to_str(r.get("created_by")),
+                "customer_name": customer_name,  # ✅ ADD CUSTOMER NAME
                 "invoice_number": r.get("invoice_number"),
                 "title": r.get("title", ""),
                 "description": r.get("description", ""),
@@ -102,7 +143,6 @@ async def list_invoices(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to list invoices: {e}")
-
 
 # ---------- CREATE ----------
 @router.post("/", response_model=Dict[str, Any])

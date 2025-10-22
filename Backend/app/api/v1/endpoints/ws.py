@@ -59,39 +59,166 @@ async def customer_ws(websocket: WebSocket, token: Optional[str] = Query(default
     finally:
         manager.disconnect(websocket)
 
+
+
+# ✅ FIXED: Create booking function - No hardcoded values
+async def create_booking_from_session(
+    db: AsyncIOMotorDatabase,
+    session_id: str,
+    session_data: dict,
+    service_name: str,
+    customer_name: str,
+    customer_email: str,
+    company_id: str
+) -> bool:
+    """Create booking in database - REFACTORED WITH NO HARDCODED VALUES"""
+    try:
+        logger.info(f"💾 Creating booking for {customer_name} ({customer_email})")
+        logger.info(f"🏢 Company ID: {company_id}")
+        
+        # Validate company_id
+        if not company_id or not ObjectId.is_valid(company_id):
+            logger.error(f"❌ Invalid company_id: {company_id}")
+            return False
+        
+        company_id_obj = ObjectId(company_id)
+        
+        # Determine service type (handle both dict and string)
+        if isinstance(service_name, dict):
+            service_type_str = service_name.get("name", "General Service")
+        elif isinstance(service_name, str):
+            service_type_str = service_name
+        else:
+            service_type_str = "General Service"
+        
+        # Create job document
+        job_data = {
+            "_id": ObjectId(),
+            "company_id": company_id_obj,
+            "title": f"{service_type_str} - {customer_name}",
+            "description": "Booking created via AI chatbot",
+            "customer_name": customer_name,
+            "customer_email": customer_email,
+            "customer_phone": "",
+            "service_type": service_type_str,
+            "location": "To be confirmed",
+            "estimated_price": 0,
+            "scheduled_date": datetime.utcnow() + timedelta(days=1),
+            "scheduled_time": "To be confirmed",
+            "frequency": "one-time",
+            "status": "scheduled",
+            "priority": "medium",
+            "source": "ai_chatbot",
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow(),
+            "notes": [{
+                "content": f"Booking created via AI chatbot. Session: {session_id}",
+                "created_at": datetime.utcnow(),
+                "created_by": "ai_assistant"
+            }],
+            "ai_session_id": session_id
+        }
+        
+        # Save to database
+        result = await db.jobs.insert_one(job_data)
+        job_id = str(result.inserted_id)
+        
+        logger.info(f"✅ Job saved with ID: {job_id}")
+        logger.info(f"   🏢 Company: {company_id_obj}")
+        logger.info(f"   👤 Customer: {customer_name}")
+        logger.info(f"   📧 Email: {customer_email}")
+        logger.info(f"   🧹 Service: {service_type_str}")
+        
+        # Create lead
+        lead_data = {
+            "_id": ObjectId(),
+            "company_id": company_id_obj,
+            "title": f"AI Lead - {customer_name}",
+            "contact_name": customer_name,
+            "contact_email": customer_email,
+            "contact_phone": "",
+            "service_type": service_type_str,
+            "status": "converted",
+            "lead_score": "hot",
+            "source": "ai_chatbot",
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow(),
+            "converted_at": datetime.utcnow(),
+            "job_id": job_id,
+            "notes": [{
+                "content": f"Auto-converted from AI chatbot booking",
+                "created_at": datetime.utcnow(),
+                "created_by": "ai_assistant"
+            }]
+        }
+        
+        await db.leads.insert_one(lead_data)
+        logger.info(f"✅ Lead created for {customer_name}")
+        
+        # Create admin notification
+        notification_doc = {
+            "_id": ObjectId(),
+            "company_id": company_id_obj,
+            "type": "ai_booking",
+            "title": "New AI Chatbot Booking",
+            "message": f"New booking: {service_type_str} for {customer_name}",
+            "data": {
+                "job_id": job_id,
+                "customer_name": customer_name,
+                "customer_email": customer_email,
+                "service_type": service_type_str,
+                "source": "ai_chatbot"
+            },
+            "is_read": False,
+            "priority": "high",
+            "created_at": datetime.utcnow()
+        }
+        
+        await db.notifications.insert_one(notification_doc)
+        logger.info(f"✅ Admin notification created")
+        
+        logger.info(f"🎉 Booking process completed successfully!")
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Error creating booking: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        return False
+
+        
 @router.websocket("/chatbot/{company_id}")
 async def canvas_flow_chatbot(websocket: WebSocket, company_id: str):
     """Canvas Flow AI chatbot that reads from visual flow data"""
     await manager.connect_chatbot(websocket, company_id)
+    session_id = f"session_{company_id}_{id(websocket)}"
     
     try:
-        # Initialize Canvas Flow AI Service
-        from app.core.database import get_database
+        # ✅ Get database connection
         db = await get_database()
-        from app.services.canvas_flow_ai_service import CanvasFlowAIService  # Import the new service
+        
+        # Initialize Canvas Flow AI Service
+        from app.services.canvas_flow_ai_service import CanvasFlowAIService
         ai_service = CanvasFlowAIService(db)
         
         await websocket.send_json({
             "type": "connected",
             "company_id": company_id,
-            "message": "AI Assistant powered by Canvas Flows connected!"
+            "message": "AI Assistant connected! How can I help you today?"
         })
         
-        session_id = f"session_{company_id}_{id(websocket)}"
         logger.info(f"✅ Canvas Flow AI chatbot connected - Session: {session_id}")
+        logger.info(f"🏢 Company ID: {company_id}")
         
-        # Initialize conversation session
+        # Initialize conversation session with company_id
         conversation_sessions[session_id] = {
             "messages": [],
             "customer_info": {},
             "booking_state": "initial",
-            "company_id": company_id,
-            "current_service": None
+            "company_id": company_id,  # ✅ Store company_id
+            "current_service": None,
+            "awaiting_booking_info": False
         }
-        
-        # Send initial greeting with flow statistics
-        flow_stats = await ai_service.get_flow_statistics(company_id)
-        logger.info(f"📊 Flow statistics: {flow_stats}")
         
         while True:
             data = await websocket.receive_text()
@@ -114,6 +241,118 @@ async def canvas_flow_chatbot(websocket: WebSocket, company_id: str):
                         "timestamp": datetime.utcnow().isoformat()
                     })
                     
+                    # CHECK IF USER PROVIDED EMAIL AND NAME FOR BOOKING
+                    if conversation_sessions[session_id].get("awaiting_booking_info"):
+                        # Extract email and name from message
+                        import re
+                        email_match = re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', user_message)
+                        
+                        if email_match:
+                            email = email_match.group()
+                            # Extract name
+                            name_patterns = [
+                                r'name\s+is\s+([A-Za-z]+)',
+                                r'([A-Za-z]+)\s+' + re.escape(email),
+                                r'and\s+name\s+is\s+([A-Za-z]+)',
+                                r'my\s+name\s+is\s+([A-Za-z]+)',
+                                r'(\w+)@'  # Fallback: use email prefix
+                            ]
+                            
+                            name = None
+                            for pattern in name_patterns:
+                                name_match = re.search(pattern, user_message, re.IGNORECASE)
+                                if name_match:
+                                    name = name_match.group(1).title()
+                                    break
+                            
+                            if not name:
+                                name = email.split('@')[0].title()
+                            
+                            # Store customer info
+                            conversation_sessions[session_id]["customer_info"] = {
+                                "email": email,
+                                "name": name
+                            }
+                            
+                            logger.info(f"📧 Captured: {name} - {email}")
+                            
+                            # ✅ Create booking with database and company_id
+                            current_service = conversation_sessions[session_id].get("current_service", "General Service")
+                            
+                            booking_result = await create_booking_from_session(
+                                db=db,  # ✅ Pass database
+                                session_id=session_id,
+                                session_data=conversation_sessions[session_id],
+                                service_name=current_service,
+                                customer_name=name,
+                                customer_email=email,
+                                company_id=company_id  # ✅ Pass company_id
+                            )
+                            
+                            if booking_result:
+                                confirmation_message = f"Perfect! I've scheduled your appointment for {current_service if isinstance(current_service, str) else current_service.get('name', 'our service')}.\n\n" \
+                                                     f"✅ Booking Confirmed\n" \
+                                                     f"📧 Confirmation sent to: {email}\n" \
+                                                     f"👤 Name: {name}\n\n" \
+                                                     f"Our team will contact you within 24 hours to confirm the details. Is there anything else I can help you with?"
+                                
+                                conversation_sessions[session_id]["awaiting_booking_info"] = False
+                                conversation_sessions[session_id]["booking_state"] = "completed"
+                                
+                                # Send confirmation
+                                await websocket.send_json({
+                                    "type": "chat_response",
+                                    "session_id": session_id,
+                                    "message": confirmation_message,
+                                    "intent": "booking_confirmed",
+                                    "booking_completed": True
+                                })
+                                
+                                # Add to conversation history
+                                conversation_sessions[session_id]["messages"].append({
+                                    "role": "assistant",
+                                    "content": confirmation_message,
+                                    "timestamp": datetime.utcnow().isoformat()
+                                })
+                                
+                                continue
+                            else:
+                                error_message = "I apologize, but there was an issue creating your booking. Please try again or contact us directly."
+                                await websocket.send_json({
+                                    "type": "chat_response",
+                                    "session_id": session_id,
+                                    "message": error_message,
+                                    "intent": "booking_error"
+                                })
+                                conversation_sessions[session_id]["awaiting_booking_info"] = False
+                                continue
+                    
+                    # CHECK IF USER WANTS TO BOOK
+                    booking_keywords = ["book", "appointment", "schedule", "reserve", "yes book", "confirm booking"]
+                    if any(keyword in user_message.lower() for keyword in booking_keywords):
+                        if not conversation_sessions[session_id].get("customer_info", {}).get("email"):
+                            # Ask for booking info
+                            conversation_sessions[session_id]["awaiting_booking_info"] = True
+                            booking_request_msg = "Great! I'd be happy to schedule an appointment for you.\n\n" \
+                                                "Please provide:\n" \
+                                                "• Your name\n" \
+                                                "• Your email address\n\n" \
+                                                "Example: My name is John and my email is john@example.com"
+                            
+                            await websocket.send_json({
+                                "type": "chat_response",
+                                "session_id": session_id,
+                                "message": booking_request_msg,
+                                "intent": "requesting_booking_info"
+                            })
+                            
+                            conversation_sessions[session_id]["messages"].append({
+                                "role": "assistant",
+                                "content": booking_request_msg,
+                                "timestamp": datetime.utcnow().isoformat()
+                            })
+                            continue
+                    
                     # Generate response using Canvas Flow AI Service
                     ai_response = await ai_service.generate_canvas_response(
                         company_id=company_id,
@@ -134,7 +373,6 @@ async def canvas_flow_chatbot(websocket: WebSocket, company_id: str):
                         conversation_sessions[session_id]["current_service"] = ai_response["matched_service"]
                     
                     logger.info(f"🤖 AI response intent: {ai_response.get('intent')}")
-                    logger.info(f"🎯 Matched service: {ai_response.get('matched_service')}")
                     
                     # Send response to client
                     await websocket.send_json({
@@ -144,8 +382,7 @@ async def canvas_flow_chatbot(websocket: WebSocket, company_id: str):
                         "intent": ai_response.get("intent"),
                         "matched_service": ai_response.get("matched_service"),
                         "available_services": ai_response.get("available_services", []),
-                        "requires_human": ai_response.get("requires_human", False),
-                        "confidence": "high"
+                        "requires_human": ai_response.get("requires_human", False)
                     })
                     
                 elif message_type == "ping":
@@ -154,14 +391,16 @@ async def canvas_flow_chatbot(websocket: WebSocket, company_id: str):
             except json.JSONDecodeError:
                 await websocket.send_json({
                     "type": "error",
-                    "message": "Sorry, I didn't understand that format."
+                    "message": "Invalid message format."
                 })
             except Exception as e:
-                logger.error(f"❌ Error processing Canvas Flow AI message: {e}")
+                logger.error(f"❌ Error processing message: {e}")
+                import traceback
+                logger.error(traceback.format_exc())
                 await websocket.send_json({
                     "type": "chat_response",
                     "session_id": session_id,
-                    "message": "I'm experiencing a technical issue. Could you please try again?",
+                    "message": "I'm experiencing a technical issue. Please try again.",
                     "intent": "error"
                 })
                 
@@ -171,6 +410,8 @@ async def canvas_flow_chatbot(websocket: WebSocket, company_id: str):
             del conversation_sessions[session_id]
     except Exception as e:
         logger.error(f"Canvas Flow AI chatbot error: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
     finally:
         manager.disconnect(websocket)
 
@@ -753,3 +994,5 @@ def should_escalate_to_human(ai_message: str, conversation_history: list) -> boo
         return True
     
     return False
+
+

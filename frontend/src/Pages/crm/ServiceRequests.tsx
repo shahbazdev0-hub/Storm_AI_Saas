@@ -81,19 +81,24 @@ function ServiceRequestModal({
   }, [request])
 
   // Fetch available users for assignment
-  const { data: availableUsers } = useQuery({
-    queryKey: ['users'],
-    queryFn: async (): Promise<User[]> => {
-      try {
-        const response = await api.get('/users')
-        return response.data
-      } catch (error) {
-        console.error('Error fetching users:', error)
-        return []
-      }
-    },
-    enabled: activeTab === 'actions' && isOpen
-  })
+ // Fetch only technicians for assignment
+const { data: availableTechnicians, isLoading: loadingTechnicians } = useQuery({
+  queryKey: ['technicians'],
+  queryFn: async (): Promise<User[]> => {
+    try {
+      // Add ?role=technician to filter only technicians
+      const response = await api.get('/users', {
+        params: { role: 'technician' }
+      })
+      return response.data
+    } catch (error) {
+      console.error('Error fetching technicians:', error)
+      toast.error('Failed to load technicians')
+      return []
+    }
+  },
+  enabled: activeTab === 'actions' && isOpen
+})
 
   const handleSave = () => {
     if (request) {
@@ -142,7 +147,7 @@ function ServiceRequestModal({
 
         {/* Tabs */}
         <div className="flex border-b overflow-x-auto">
-          {['details', 'customer', 'actions'].map((tab) => (
+          {['details','actions'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -347,11 +352,15 @@ function ServiceRequestModal({
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                     >
                       <option value="">Select a team member...</option>
-                      {availableUsers?.map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.name} ({user.role})
-                        </option>
-                      ))}
+                     {availableTechnicians && availableTechnicians.length > 0 ? (
+  availableTechnicians.map((tech) => (
+    <option key={tech.id} value={tech.id}>
+      {tech.name || `${tech.first_name} ${tech.last_name}` || tech.email}
+    </option>
+  ))
+) : (
+  <option value="" disabled>No technicians available</option>
+)}
                     </select>
                   </div>
                   
@@ -377,7 +386,7 @@ function ServiceRequestModal({
                 </div>
               </div>
 
-              {/* Convert to Lead Section */}
+              {/* Convert to Lead Section
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h4 className="font-medium text-gray-900 mb-4">Convert to Lead</h4>
                 <p className="text-sm text-gray-600 mb-4">
@@ -390,7 +399,7 @@ function ServiceRequestModal({
                   <ArrowPathIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>Convert to Lead</span>
                 </button>
-              </div>
+              </div> */}
 
               {/* Current Assignment Info */}
               {request.assigned_user && (

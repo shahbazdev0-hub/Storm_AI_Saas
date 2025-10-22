@@ -45,7 +45,10 @@ export const ChatbotWidget: React.FC<ChatbotWidgetProps> = ({
   position = 'bottom-right',
   theme = 'light'
 }) => {
-  const actualCompanyId = companyId === 'your-company-id' ? '68af46dab1355f0072ad6fa1' : companyId
+  // const actualCompanyId = companyId === 'your-company-id' ? '68af46dab1355f0072ad6fa1' : companyId
+  const { user } = useAuthStore()  // You need to import useAuthStore
+  const actualCompanyId = user?.company_id || companyId
+  
   const [isWidgetOpen, setIsWidgetOpen] = useState(isOpen)
   const [isMinimized, setIsMinimized] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])

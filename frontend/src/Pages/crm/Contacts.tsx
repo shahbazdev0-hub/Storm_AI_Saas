@@ -74,7 +74,7 @@ export default function Contacts() {
       const params = new URLSearchParams()
       if (searchTerm) params.append('search', searchTerm)
       if (statusFilter !== 'all') params.append('status', statusFilter)
-      if (typeFilter !== 'all') params.append('contact_type', typeFilter)
+      if (typeFilter !== 'all') params.append('type', typeFilter)
       
       console.log('🔍 Fetching contacts with params:', params.toString())
       const response = await api.get(`/contacts/?${params.toString()}`)

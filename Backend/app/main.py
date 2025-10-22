@@ -72,6 +72,14 @@ __all__ = ['app', 'utc_now']
 
 # Get logger
 logger = get_logger(__name__)
+# 🔍 DEBUG - Check if environment variables are loaded
+print("\n" + "="*50)
+print("🔍 ENVIRONMENT VARIABLES CHECK")
+print("="*50)
+print(f"OpenAI API Key: {settings.OPENAI_API_KEY[:20] if settings.OPENAI_API_KEY else '❌ NOT LOADED'}...")
+print(f"OpenAI Model: {settings.OPENAI_MODEL}")
+print(f"Database URL: {settings.MONGODB_URL[:30]}...")
+print("="*50 + "\n")
 
 class RequestTimingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -432,6 +440,9 @@ async def test_api():
         "message": "API is working!", 
         "timestamp": utc_now().isoformat()  # Use our utility function
     }
+
+
+
 
 if __name__ == "__main__":
     uvicorn.run(

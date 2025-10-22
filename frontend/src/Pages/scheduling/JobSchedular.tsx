@@ -1,5 +1,6 @@
 // frontend/src/pages/scheduling/JobScheduler.tsx
-import { useState } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -50,6 +51,9 @@ export default function JobScheduler() {
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTechnician, setSelectedTechnician] = useState('')
   const [conflictWarnings, setConflictWarnings] = useState<string[]>([])
+  const location = useLocation()
+  const navigate = useNavigate()
+  const jobToEdit = location.state?.job
 
   const queryClient = useQueryClient()
 
@@ -68,29 +72,116 @@ export default function JobScheduler() {
     }
   })
 
+
+// ✅ ADD THIS: Load job data if editing
+useEffect(() => {
+  if (jobToEdit) {
+    console.log('📝 Editing job:', jobToEdit)
+    setValue('customer_id', jobToEdit.customer_id || '')
+    setValue('service_type', jobToEdit.service_type || '')
+    setValue('scheduled_date', jobToEdit.scheduled_date || '')
+    setValue('start_time', jobToEdit.start_time || '')
+    setValue('estimated_duration', jobToEdit.estimated_duration || 60)
+    setValue('technician_id', jobToEdit.technician_id || '')
+    setValue('priority', jobToEdit.priority || 'medium')
+    setValue('notes', jobToEdit.notes || '')
+    setValue('address', jobToEdit.address || '')
+    setValue('city', jobToEdit.city || '')
+    setValue('state', jobToEdit.state || '')
+    setValue('zip_code', jobToEdit.zip_code || '')
+  }
+}, [jobToEdit, setValue])
+
   const watchedDate = watch('scheduled_date')
   const watchedTechnician = watch('technician_id')
 
-  // Fetch customers
-  const { data: customers } = useQuery({
-    queryKey: ['customers'],
+  // Fetch customers (from users with role=customer)
+  const { data: allCustomers, isLoading: loadingCustomers, error: customersError } = useQuery({
+    queryKey: ['customers-for-jobs'],
     queryFn: async () => {
-      const response = await api.get('/contacts/?type=customer')  
-      return response.data
+      try {
+        console.log('🔍 Fetching customers from: /users?role=customer')
+        const response = await api.get('/users?role=customer')
+        console.log('✅ Customers API response:', response.data)
+        console.log('✅ Total returned:', response.data?.length || 0)
+        
+        return response.data || []
+      } catch (error) {
+        console.error('❌ Error fetching customers:', error)
+        toast.error('Failed to load customers')
+        return []
+      }
     },
   })
 
-  // Fetch technicians
-  const { data: technicians } = useQuery({
+  // ✅ BACKUP: Filter customers on frontend in case backend doesn't filter
+  const customers = useMemo(() => {
+    if (!allCustomers) return []
+    
+    const filtered = allCustomers.filter((user: any) => user.role === 'customer')
+    
+    console.log(`📊 Customers filtering: ${allCustomers.length} total → ${filtered.length} customers`)
+    
+    if (filtered.length > 0) {
+      console.log('✅ Customers available:')
+      filtered.forEach((customer: any, index: number) => {
+        console.log(`  ${index + 1}. ${customer.name || customer.email} (ID: ${customer.id})`)
+      })
+    } else {
+      console.warn('⚠️ No customers found after filtering!')
+    }
+    
+    return filtered
+  }, [allCustomers])
+
+  // ✅ Fetch only technicians
+  const { data: allUsers, isLoading: loadingTechnicians } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
-      const response = await api.get('/users/?role=technician')  
-      return response.data
+      try {
+        // Try to fetch with role filter
+        const url = '/users?role=technician'
+        console.log('🔍 Fetching:', url)
+        
+        const response = await api.get(url)
+        
+        console.log('✅ API Response:', response.data)
+        console.log('✅ Total returned:', response.data?.length || 0)
+        
+        return response.data || []
+      } catch (error) {
+        console.error('❌ Error fetching technicians:', error)
+        toast.error('Failed to load technicians')
+        return []
+      }
     },
   })
 
+  // ✅ BACKUP: Filter technicians on frontend in case backend doesn't filter
+  const technicians = useMemo(() => {
+    if (!allUsers) return []
+    
+    console.log('🔍 Filtering users:')
+    allUsers.forEach((user: any, index: number) => {
+      console.log(`  User ${index + 1}: ${user.name} - Role: "${user.role}" - Is Technician: ${user.role === 'technician'}`)
+    })
+    
+    const filtered = allUsers.filter((user: any) => {
+      const isTechnician = user.role === 'technician'
+      return isTechnician
+    })
+    
+    console.log(`📊 Result: ${allUsers.length} total users → ${filtered.length} technicians`)
+    
+    if (allUsers.length !== filtered.length) {
+      console.warn('⚠️ Backend not filtering! Using frontend filter.')
+    }
+    
+    return filtered
+  }, [allUsers])
+
   // Fetch availability
-  const { data: availability, isLoading: loadingAvailability } = useQuery({
+  const { data: availability, isLoading: loadingAvailability, error: availabilityError } = useQuery({
     queryKey: ['availability', watchedDate, watchedTechnician],
     queryFn: async () => {
       if (!watchedDate) return null
@@ -103,40 +194,63 @@ export default function JobScheduler() {
         params.append('technician_id', watchedTechnician)
       }
       
-      const response = await api.get(`/scheduling/availability?${params.toString()}`)
-      return response.data
+      console.log('🔍 Fetching availability:', `/scheduling/availability?${params.toString()}`)
+      
+      try {
+        const response = await api.get(`/scheduling/availability?${params.toString()}`)
+        console.log('✅ Availability response:', response.data)
+        return response.data
+      } catch (error: any) {
+        console.error('❌ Availability error:', error)
+        console.error('❌ Error response:', error.response?.data)
+        
+        // Don't throw error, just return null to show "no data" state
+        if (error.response?.status === 422) {
+          console.warn('⚠️ Availability endpoint validation error - using fallback')
+          toast.error('Could not load availability - please check date format')
+        }
+        return null
+      }
     },
     enabled: !!watchedDate,
+    retry: false, // Don't retry on 422 errors
   })
 
   // Create job mutation
   const createJobMutation = useMutation({
-    mutationFn: async (jobData: JobFormData) => {
-      const response = await api.post('/jobs', {
-        ...jobData,
-        start_time: `${jobData.scheduled_date}T${jobData.start_time}:00`,
-        end_time: new Date(
-          new Date(`${jobData.scheduled_date}T${jobData.start_time}:00`).getTime() +
-          jobData.estimated_duration * 60000
-        ).toISOString()
-      })
+  mutationFn: async (jobData: JobFormData) => {
+    console.log(jobToEdit ? '📝 Updating job' : '📝 Creating job', jobData)
+    
+    const payload = {
+      ...jobData,
+      start_time: `${jobData.scheduled_date}T${jobData.start_time}:00`,
+      end_time: new Date(
+        new Date(`${jobData.scheduled_date}T${jobData.start_time}:00`).getTime() +
+        jobData.estimated_duration * 60000
+      ).toISOString()
+    }
+    
+    // ✅ If editing, use PATCH; if creating, use POST
+    if (jobToEdit) {
+      const response = await api.patch(`/jobs/${jobToEdit.id}`, payload)
       return response.data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['calendar-jobs'] })
-      queryClient.invalidateQueries({ queryKey: ['availability'] })
-      toast.success('Job scheduled successfully!')
-      reset()
-      setConflictWarnings([])
-    },
-    onError: (error: any) => {
-      if (error.response?.status === 409) {
-        setConflictWarnings(error.response.data.conflicts || ['Scheduling conflict detected'])
-      } else {
-        toast.error(error.response?.data?.detail || 'Failed to schedule job')
-      }
-    },
-  })
+    } else {
+      const response = await api.post('/jobs', payload)
+      return response.data
+    }
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['calendar-jobs'] })
+    queryClient.invalidateQueries({ queryKey: ['field-jobs'] })
+    queryClient.invalidateQueries({ queryKey: ['availability'] })
+    toast.success(jobToEdit ? 'Job updated successfully!' : 'Job scheduled successfully!')
+    navigate('/jobs') // ✅ Navigate back to jobs list
+  },
+  onError: (error: any) => {
+    console.error('❌ Error:', error)
+    toast.error(error.response?.data?.detail || `Failed to ${jobToEdit ? 'update' : 'schedule'} job`)
+  },
+})
 
   const onSubmit = (data: JobFormData) => {
     createJobMutation.mutate(data)
@@ -153,31 +267,25 @@ export default function JobScheduler() {
     return slots
   }
 
-  const isSlotAvailable = (time: string) => {
-    if (!availability) return true
-    
-    if (watchedTechnician) {
-      const techAvailability = availability.find((a: AvailabilityData) => a.technician_id === watchedTechnician)
-      const slot = techAvailability?.slots.find((s: TimeSlot) => s.time === time)
-      return slot?.available ?? true
-    }
-    
-    // Check if any technician is available
-    return availability.some((a: AvailabilityData) =>
-      a.slots.some((s: TimeSlot) => s.time === time && s.available)
-    )
-  }
+ const isSlotAvailable = (time: string) => {
+  if (!availability || !availability.slots) return true
+  
+  const slot = availability.slots.find((s: TimeSlot) => s.time === time)
+  return slot?.available ?? true
+}
 
-  const getAvailableTechnicians = (time: string) => {
-    if (!availability) return []
-    
-    return availability
-      .map((a: AvailabilityData) => {
-        const slot = a.slots.find((s: TimeSlot) => s.time === time)
-        return slot?.available ? { id: a.technician_id, name: slot.technician_name } : null
-      })
-      .filter(Boolean)
+const getAvailableTechnicians = (time: string) => {
+  if (!availability || !availability.slots) return []
+  
+  const slot = availability.slots.find((s: TimeSlot) => s.time === time)
+  
+  // If slot is available and has technician info, return it
+  if (slot?.available && slot.technician_id && slot.technician_name) {
+    return [{ id: slot.technician_id, name: slot.technician_name }]
   }
+  
+  return []
+}
 
   const serviceTypes = [
     'Pest Control',
@@ -195,12 +303,17 @@ export default function JobScheduler() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Job Scheduler</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Schedule new service appointments with real-time availability checking
-        </p>
-      </div>
+<div>
+  <h1 className="text-2xl font-bold text-gray-900">
+    {jobToEdit ? 'Edit Job' : 'Job Scheduler'}
+  </h1>
+  <p className="mt-1 text-sm text-gray-500">
+    {jobToEdit 
+      ? `Editing Job #${jobToEdit.job_number}` 
+      : 'Schedule new service appointments with real-time availability checking'
+    }
+  </p>
+</div>
 
       {/* Conflict Warnings */}
       {conflictWarnings.length > 0 && (
@@ -227,10 +340,10 @@ export default function JobScheduler() {
         {/* Job Form */}
         <div className="lg:col-span-2">
           <div className="bg-white shadow rounded-lg p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-6">Schedule New Job</h3>
+            <h2 className="text-lg font-medium text-gray-900 mb-6">Schedule New Job</h2>
             
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Customer Selection */}
+              {/* Customer & Service Type */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
@@ -239,16 +352,30 @@ export default function JobScheduler() {
                   <select
                     {...register('customer_id')}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                    disabled={loadingCustomers}
                   >
-                    <option value="">Select customer...</option>
-                    {customers?.map((customer: any) => (
-                      <option key={customer.id} value={customer.id}>
-                        {customer.first_name} {customer.last_name}
-                      </option>
-                    ))}
+                    <option value="">
+                      {loadingCustomers ? 'Loading customers...' : 'Select a customer'}
+                    </option>
+                    {customers && customers.length > 0 ? (
+                      customers.map((customer: any) => (
+                        <option key={customer.id} value={customer.id}>
+                          {customer.name || customer.email || 'Unnamed Customer'}
+                        </option>
+                      ))
+                    ) : (
+                      !loadingCustomers && (
+                        <option value="" disabled>No customers found</option>
+                      )
+                    )}
                   </select>
                   {errors.customer_id && (
                     <p className="mt-1 text-sm text-red-600">{errors.customer_id.message}</p>
+                  )}
+                  {!loadingCustomers && customers && customers.length === 0 && (
+                    <p className="mt-1 text-sm text-amber-600">
+                      ⚠️ No customers found. Please create customer users first in the Users page.
+                    </p>
                   )}
                 </div>
 
@@ -260,10 +387,10 @@ export default function JobScheduler() {
                     {...register('service_type')}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                   >
-                    <option value="">Select service...</option>
-                    {serviceTypes.map((service) => (
-                      <option key={service} value={service}>
-                        {service}
+                    <option value="">Select service type</option>
+                    {serviceTypes.map((type) => (
+                      <option key={type} value={type}>
+                        {type}
                       </option>
                     ))}
                   </select>
@@ -273,10 +400,11 @@ export default function JobScheduler() {
                 </div>
               </div>
 
-              {/* Date and Time */}
+              {/* Date & Time */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
+                    <CalendarIcon className="h-4 w-4 inline mr-1" />
                     Date *
                   </label>
                   <input
@@ -292,21 +420,17 @@ export default function JobScheduler() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
+                    <ClockIcon className="h-4 w-4 inline mr-1" />
                     Start Time *
                   </label>
                   <select
                     {...register('start_time')}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
                   >
-                    <option value="">Select time...</option>
+                    <option value="">Select time</option>
                     {generateTimeSlots().map((time) => (
-                      <option
-                        key={time}
-                        value={time}
-                        disabled={!isSlotAvailable(time)}
-                        className={!isSlotAvailable(time) ? 'text-gray-400' : ''}
-                      >
-                        {time} {!isSlotAvailable(time) ? '(Unavailable)' : ''}
+                      <option key={time} value={time}>
+                        {time}
                       </option>
                     ))}
                   </select>
@@ -319,40 +443,51 @@ export default function JobScheduler() {
                   <label className="block text-sm font-medium text-gray-700">
                     Duration (minutes) *
                   </label>
-                  <select
+                  <input
                     {...register('estimated_duration', { valueAsNumber: true })}
+                    type="number"
+                    min="15"
+                    step="15"
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                  >
-                    <option value={30}>30 minutes</option>
-                    <option value={60}>1 hour</option>
-                    <option value={90}>1.5 hours</option>
-                    <option value={120}>2 hours</option>
-                    <option value={180}>3 hours</option>
-                    <option value={240}>4 hours</option>
-                  </select>
+                  />
                   {errors.estimated_duration && (
                     <p className="mt-1 text-sm text-red-600">{errors.estimated_duration.message}</p>
                   )}
                 </div>
               </div>
 
-              {/* Technician and Priority */}
+              {/* Technician & Priority */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Technician
+                    <UserIcon className="h-4 w-4 inline mr-1" />
+                    Assign Technician
                   </label>
                   <select
                     {...register('technician_id')}
                     className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+                    disabled={loadingTechnicians}
                   >
-                    <option value="">Auto-assign best available</option>
-                    {technicians?.map((tech: any) => (
-                      <option key={tech.id} value={tech.id}>
-                        {tech.name}
-                      </option>
-                    ))}
+                    <option value="">
+                      {loadingTechnicians ? 'Loading technicians...' : 'Auto-assign best available'}
+                    </option>
+                    {technicians && technicians.length > 0 ? (
+                      technicians.map((tech: any) => (
+                        <option key={tech.id} value={tech.id}>
+                          {tech.name || `${tech.first_name} ${tech.last_name}` || tech.email}
+                        </option>
+                      ))
+                    ) : (
+                      !loadingTechnicians && (
+                        <option value="" disabled>No technicians available</option>
+                      )
+                    )}
                   </select>
+                  {!loadingTechnicians && technicians && technicians.length === 0 && (
+                    <p className="mt-1 text-sm text-amber-600">
+                      ⚠️ No technicians found. Please create technician users first.
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -374,6 +509,7 @@ export default function JobScheduler() {
               {/* Address */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
+                  <MapPinIcon className="h-4 w-4 inline mr-1" />
                   Service Address *
                 </label>
                 <input
@@ -453,12 +589,15 @@ export default function JobScheduler() {
                   Clear
                 </button>
                 <button
-                  type="submit"
-                  disabled={createJobMutation.isPending}
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
-                >
-                  {createJobMutation.isPending ? 'Scheduling...' : 'Schedule Job'}
-                </button>
+  type="submit"
+  disabled={createJobMutation.isPending}
+  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
+>
+  {createJobMutation.isPending 
+    ? (jobToEdit ? 'Updating...' : 'Scheduling...') 
+    : (jobToEdit ? 'Update Job' : 'Schedule Job')
+  }
+</button>
               </div>
             </form>
           </div>
@@ -476,6 +615,24 @@ export default function JobScheduler() {
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="h-8 bg-gray-200 rounded"></div>
                 ))}
+              </div>
+            ) : availabilityError ? (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <p className="text-sm text-amber-800">
+                  ⚠️ Could not load availability data. The availability feature may not be configured yet.
+                </p>
+                <p className="text-xs text-amber-600 mt-2">
+                  You can still schedule jobs - they will be assigned based on technician selection.
+                </p>
+              </div>
+            ) : !availability || (Array.isArray(availability) && availability.length === 0) ? (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800">
+                  ℹ️ No availability data for this date.
+                </p>
+                <p className="text-xs text-blue-600 mt-2">
+                  All time slots are available for scheduling.
+                </p>
               </div>
             ) : (
               <div className="space-y-2">

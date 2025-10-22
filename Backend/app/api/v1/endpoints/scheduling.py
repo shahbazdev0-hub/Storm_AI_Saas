@@ -60,74 +60,92 @@ async def get_calendar(
     
     return calendar_events
 
+
+
+
+
 @router.get("/availability")
 async def check_availability(
     db: AsyncIOMotorDatabase = Depends(get_database),
     current_user: dict = Depends(get_current_user),
-    date: datetime = Query(...),
-    technician_id: Optional[str] = None,
-    duration: int = Query(default=60)  # minutes
+    date: str = Query(..., description="Date in YYYY-MM-DD format"),
+    technician_id: Optional[str] = Query(None),
+    duration: int = Query(default=60)
 ) -> Any:
     """Check technician availability for given date"""
-    scheduling_service = SchedulingService(db)
-    
-    # Get all jobs for the date
-    start_of_day = date.replace(hour=0, minute=0, second=0)
-    end_of_day = date.replace(hour=23, minute=59, second=59)
-    
-    jobs = await scheduling_service.get_jobs(
-        company_id=str(current_user["company_id"]),
-        start_date=start_of_day,
-        end_date=end_of_day,
-        technician_id=technician_id
-    )
-    
-    # Calculate available time slots
-    business_hours = {
-        "start": 8,  # 8 AM
-        "end": 18,   # 6 PM
-        "lunch_start": 12,  # 12 PM
-        "lunch_end": 13     # 1 PM
-    }
-    
-    available_slots = []
-    current_time = date.replace(hour=business_hours["start"], minute=0, second=0)
-    end_time = date.replace(hour=business_hours["end"], minute=0, second=0)
-    
-    while current_time + timedelta(minutes=duration) <= end_time:
-        # Skip lunch hour
-        if (current_time.hour >= business_hours["lunch_start"] and 
-            current_time.hour < business_hours["lunch_end"]):
-            current_time += timedelta(hours=1)
-            continue
+    try:
+        # Parse date
+        parsed_date = datetime.strptime(date, "%Y-%m-%d")
+        logger.info(f"📅 Availability check: {date}, Tech: {technician_id}")
         
-        # Check if slot conflicts with existing jobs
-        slot_end = current_time + timedelta(minutes=duration)
-        conflicts = False
+        # Get all jobs for the date
+        start_of_day = parsed_date.replace(hour=0, minute=0, second=0)
+        end_of_day = parsed_date.replace(hour=23, minute=59, second=59)
         
-        for job in jobs:
-            job_start = job["scheduled_date"]
-            job_end = job_start + timedelta(minutes=job["scheduled_duration"])
+        # Build query
+        query = {
+            "company_id": ObjectId(current_user["company_id"]),
+            "$or": [
+                {"time_tracking.scheduled_start": {"$gte": start_of_day, "$lte": end_of_day}},
+                {"time_tracking.scheduled_end": {"$gte": start_of_day, "$lte": end_of_day}}
+            ]
+        }
+        
+        if technician_id and ObjectId.is_valid(technician_id):
+            query["technician_id"] = ObjectId(technician_id)
+        
+        # Get jobs
+        jobs = await db.jobs.find(query).to_list(length=None)
+        logger.info(f"📋 Found {len(jobs)} jobs for {date}")
+        
+        # Generate time slots
+        available_slots = []
+        current_time = parsed_date.replace(hour=8, minute=0)
+        end_time = parsed_date.replace(hour=18, minute=0)
+        
+        while current_time <= end_time:
+            slot_time = current_time.strftime("%H:%M")
+            is_available = True
             
-            if (current_time < job_end and slot_end > job_start):
-                conflicts = True
-                break
-        
-        if not conflicts:
+            # Check conflicts
+            for job in jobs:
+                time_tracking = job.get("time_tracking", {})
+                job_start = time_tracking.get("scheduled_start")
+                job_end = time_tracking.get("scheduled_end")
+                
+                if job_start and job_end:
+                    if job_start <= current_time < job_end:
+                        is_available = False
+                        break
+            
             available_slots.append({
-                "start_time": current_time,
-                "end_time": slot_end,
-                "duration": duration
+                "time": slot_time,
+                "available": is_available
             })
+            
+            current_time += timedelta(minutes=30)
         
-        current_time += timedelta(minutes=30)  # 30-minute intervals
-    
-    return {
-        "date": date,
-        "technician_id": technician_id,
-        "available_slots": available_slots,
-        "total_slots": len(available_slots)
-    }
+        logger.info(f"✅ Generated {len(available_slots)} time slots")
+        
+        return {
+            "date": date,
+            "technician_id": technician_id,
+            "slots": available_slots
+        }
+        
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Invalid date format")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Availability error: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
 
 @router.get("/optimize-routes")
 async def optimize_routes(

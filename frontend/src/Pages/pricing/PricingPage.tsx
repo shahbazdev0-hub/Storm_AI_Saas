@@ -266,12 +266,13 @@ const PaymentModal = ({ isOpen, onClose, planId, planName, price, billingCycle, 
 }
 
 const PricingPage = () => {
+  const { token, user, refreshUserData, hasActiveSubscription } = useAuthStore()
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly')
   const [loading, setLoading] = useState<string | null>(null)
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   
-  const { refreshUserData, hasActiveSubscription, user } = useAuthStore()
+  // const { refreshUserData, hasActiveSubscription, user } = useAuthStore()
   // Payment Modal State
   const [paymentModal, setPaymentModal] = useState({
     isOpen: false,
@@ -340,19 +341,26 @@ const PricingPage = () => {
       price: price
     })
   }
-const handlePaymentSuccess = async () => {
+// ✅ CORRECT: Now use the token that was extracted at component level
+  const handlePaymentSuccess = async () => {
     setLoading(paymentModal.planId)
     
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-      const token = localStorage.getItem('access_token') || localStorage.getItem('token')
+      
+      // ✅ token is already available from the hook at the top
+      if (!token) {
+        throw new Error('No authentication token found. Please log in again.')
+      }
       
       console.log('💳 Creating subscription in backend...')
+      console.log('🔑 Using token:', token ? 'Token exists' : 'No token')
+      
       const response = await fetch(`${API_URL}/api/v1/auth/subscription/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`  // ✅ Use token from component scope
         },
         body: JSON.stringify({
           plan_id: paymentModal.planId,
@@ -368,15 +376,15 @@ const handlePaymentSuccess = async () => {
       const data = await response.json()
       console.log('✅ Subscription created:', data)
       
-      // 2️⃣ Refresh user data
+      // Refresh user data
       console.log('🔄 Refreshing user data...')
-      await refreshUserData()  // ✅ Now you can use it directly
+      await refreshUserData()  // ✅ This is also from the hook at top
       
-      // 3️⃣ Small delay
+      // Small delay to ensure state is updated
       await new Promise(resolve => setTimeout(resolve, 800))
       
-      // 4️⃣ Check subscription
-      if (hasActiveSubscription()) {  // ✅ Use the hook function
+      // Check subscription status
+      if (hasActiveSubscription()) {  // ✅ This too is from the hook at top
         console.log('✅ Subscription verified!')
         alert(`🎉 Welcome to ${paymentModal.planName}!`)
         window.location.href = '/customer-portal/dashboard'

@@ -15644,3 +15644,1661 @@ AssertionError: orjson must be installed to use ORJSONResponse
 2025-10-10 18:38:54,976 | ERROR    | dependencies.auth | 🔐 JWT decode error: Signature has expired.
 2025-10-10 18:38:55,233 | ERROR    | dependencies.auth | 🔐 JWT decode error: Signature has expired.
 2025-10-10 20:23:38,272 | ERROR    | dependencies.auth | 🔐 JWT decode error: Not enough segments
+2025-10-21 21:11:09,851 | ERROR    | dependencies.auth | 🔐 JWT decode error: Signature has expired.
+2025-10-22 01:50:50,095 | ERROR    | endpoints.jobs.create | Error creating job: 'time_tracking'
+2025-10-22 01:51:07,746 | ERROR    | endpoints.jobs.create | Error creating job: 'time_tracking'
+2025-10-22 19:35:25,132 | ERROR    | app.middleware.logging_middleware | [48ab6488-6931-40c0-ad6e-78fc67fb560c] GET /api/v1/scheduling/availability - ERROR - 0.25s - 'scheduled_date'
+2025-10-22 19:35:25,135 | ERROR    | app.main        | Unhandled exception on GET /api/v1/scheduling/availability: 'scheduled_date'
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\scheduling.py", line 116, in check_availability
+    job_start = job["scheduled_date"]
+                ~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'scheduled_date'
+2025-10-22 19:36:01,270 | ERROR    | app.middleware.logging_middleware | [96cc903c-22ec-40b0-ba37-fd675fcdd56e] GET /api/v1/scheduling/availability - ERROR - 0.28s - 'scheduled_date'
+2025-10-22 19:36:01,304 | ERROR    | app.main        | Unhandled exception on GET /api/v1/scheduling/availability: 'scheduled_date'
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\scheduling.py", line 116, in check_availability
+    job_start = job["scheduled_date"]
+                ~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'scheduled_date'
+2025-10-22 20:30:10,483 | ERROR    | dependencies.auth | 🔐 Database error: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:30:10,515 | ERROR    | dependencies.auth | 🔐 Database error: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:30:13,523 | ERROR    | endpoints.jobs.calendar | Calendar error: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:30:15,392 | ERROR    | dependencies.auth | 🔐 Database error: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:31:22,991 | ERROR    | app.middleware.logging_middleware | [5f7a240c-06ef-4237-a8b9-6921fc466000] POST /api/v1/auth/login - ERROR - 28.81s - cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:31:22,999 | ERROR    | app.main        | Unhandled exception on POST /api/v1/auth/login: cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\auth.py", line 206, in login
+    await db.users.update_one(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 1086, in update_one
+    self._update_retryable(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 881, in _update_retryable
+    return self.__database.client._retryable_write(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1522, in _retryable_write
+    with self._tmp_session(session) as s:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1840, in _tmp_session
+    s = self._ensure_session(session)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1823, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1766, in __start_session
+    self._topology._check_implicit_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 573, in _check_implicit_session_support
+    self._check_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 589, in _check_session_support
+    self._select_servers_loop(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:31:38,407 | ERROR    | app.middleware.logging_middleware | [7c7c0066-d9c7-450a-83eb-12069e013586] POST /api/v1/auth/login - ERROR - 5.11s - cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-00.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:31:38,410 | ERROR    | app.main        | Unhandled exception on POST /api/v1/auth/login: cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-00.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\auth.py", line 194, in login
+    user = await db.users.find_one({"email": form_data.username.lower()})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 1506, in find_one
+    for result in cursor.limit(-1):
+                  ^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1264, in next
+    if len(self.__data) or self._refresh():
+                           ^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1155, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1823, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1766, in __start_session
+    self._topology._check_implicit_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 573, in _check_implicit_session_support
+    self._check_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 589, in _check_session_support
+    self._select_servers_loop(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f5039f66366ec044b20e, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-00.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:55,223 | ERROR    | endpoints.jobs.calendar | Error processing job 68f7f365dbbc13faa66996d1: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:55,227 | ERROR    | app.middleware.logging_middleware | [1dc12ab0-ed0a-45d5-b463-6aee43506523] GET /api/v1/dashboard/stats - ERROR - 51.48s - No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:55,231 | ERROR    | app.main        | Unhandled exception on GET /api/v1/dashboard/stats: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\dashboard.py", line 72, in get_dashboard_stats
+    month_result = await db.invoices.aggregate([
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1683, in _to_list
+    result = get_more_result.result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1908, in _on_started
+    pymongo_cursor = future.result()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 2720, in aggregate
+    return self._aggregate(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 2627, in _aggregate
+    return self.__database.client._retryable_read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1492, in _retryable_read
+    return self._retry_internal(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1462, in _retry_internal
+    ).run()
+      ^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2315, in run
+    return self._read() if self._is_read else self._write()
+           ^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2436, in _read
+    self._server = self._get_server()
+                   ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2399, in _get_server
+    return self._client._select_server(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1303, in _select_server
+    server = topology.select_server(server_selector)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 302, in select_server
+    server = self._select_server(selector, server_selection_timeout, address)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 286, in _select_server
+    servers = self.select_servers(selector, server_selection_timeout, address)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 237, in select_servers
+    server_descriptions = self._select_servers_loop(selector, server_timeout, address)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:56,810 | ERROR    | dependencies.auth | 🔐 Database error: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:59,154 | ERROR    | endpoints.jobs.calendar | Error processing job 68f7ed2c6f0500740faad9e4: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:59,159 | ERROR    | app.core.database | Database ping failed: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:59,178 | ERROR    | app.middleware.logging_middleware | [5102ef82-e4e7-4d64-b84d-930ee7f451b5] GET /api/v1/dashboard/stats - ERROR - 50.43s - No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:33:59,188 | ERROR    | app.main        | Unhandled exception on GET /api/v1/dashboard/stats: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\dashboard.py", line 72, in get_dashboard_stats
+    month_result = await db.invoices.aggregate([
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1683, in _to_list
+    result = get_more_result.result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1908, in _on_started
+    pymongo_cursor = future.result()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 2720, in aggregate
+    return self._aggregate(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 2627, in _aggregate
+    return self.__database.client._retryable_read(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1492, in _retryable_read
+    return self._retry_internal(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1462, in _retry_internal
+    ).run()
+      ^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2315, in run
+    return self._read() if self._is_read else self._write()
+           ^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2436, in _read
+    self._server = self._get_server()
+                   ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2399, in _get_server
+    return self._client._select_server(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1303, in _select_server
+    server = topology.select_server(server_selector)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 302, in select_server
+    server = self._select_server(selector, server_selection_timeout, address)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 286, in _select_server
+    servers = self.select_servers(selector, server_selection_timeout, address)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 237, in select_servers
+    server_descriptions = self._select_servers_loop(selector, server_timeout, address)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:00,185 | ERROR    | dependencies.auth | 🔐 Database error: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:00,190 | ERROR    | dependencies.auth | 🔐 Database error: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:00,699 | ERROR    | endpoints.jobs.calendar | Error processing job 68f7f4d9dbbc13faa66996d6: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:01,181 | ERROR    | app.api.v1.endpoints.users | Error fetching users: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:04,394 | ERROR    | endpoints.jobs.calendar | Error processing job 68f7f365dbbc13faa66996d1: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:05,922 | ERROR    | endpoints.jobs.calendar | Error processing job 68f8f3600b6ccdbd5c494b30: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:05,928 | ERROR    | app.middleware.logging_middleware | [1b4b3033-c0b9-40bd-86eb-e0b44d8bcb4c] GET /api/v1/scheduling/technicians - ERROR - 54.30s - No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:05,934 | ERROR    | app.main        | Unhandled exception on GET /api/v1/scheduling/technicians: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\scheduling.py", line 284, in get_technicians
+    technicians = await db.users.find({
+                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1683, in _to_list
+    result = get_more_result.result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1181, in _refresh
+    self.__send_message(q)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1060, in __send_message
+    response = client._run_operation(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1394, in _run_operation
+    return self._retryable_read(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1492, in _retryable_read
+    return self._retry_internal(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1462, in _retry_internal
+    ).run()
+      ^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2315, in run
+    return self._read() if self._is_read else self._write()
+           ^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2436, in _read
+    self._server = self._get_server()
+                   ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2399, in _get_server
+    return self._client._select_server(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1303, in _select_server
+    server = topology.select_server(server_selector)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 302, in select_server
+    server = self._select_server(selector, server_selection_timeout, address)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 286, in _select_server
+    servers = self.select_servers(selector, server_selection_timeout, address)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 237, in select_servers
+    server_descriptions = self._select_servers_loop(selector, server_timeout, address)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 1.8905520000000253>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:31,782 | ERROR    | endpoints.jobs.calendar | Error processing job 68f7f4d9dbbc13faa66996d6: SSL handshake failed: cluster0-shard-00-02.n44j3.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: connectTimeoutMS: 10000.0ms)
+2025-10-22 20:34:31,785 | ERROR    | endpoints.jobs.calendar | Error processing job 68f8f74d9f66366ec044b214: SSL handshake failed: cluster0-shard-00-02.n44j3.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: connectTimeoutMS: 10000.0ms)
+2025-10-22 20:34:37,023 | ERROR    | endpoints.jobs.calendar | Error processing job 68f8f3600b6ccdbd5c494b30: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 2.704800639999971>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:37,030 | ERROR    | endpoints.jobs.calendar | Error processing job 68f8f75a9f66366ec044b215: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 2.704800639999971>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:39,081 | ERROR    | app.middleware.logging_middleware | [bf5cf84a-584b-4c13-ba14-514dbb015f78] POST /api/v1/auth/login - ERROR - 5.26s - No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 2.704800639999971>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:39,093 | ERROR    | app.main        | Unhandled exception on POST /api/v1/auth/login: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 2.704800639999971>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\auth.py", line 194, in login
+    user = await db.users.find_one({"email": form_data.username.lower()})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 1506, in find_one
+    for result in cursor.limit(-1):
+                  ^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1264, in next
+    if len(self.__data) or self._refresh():
+                           ^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1181, in _refresh
+    self.__send_message(q)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1060, in __send_message
+    response = client._run_operation(
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1394, in _run_operation
+    return self._retryable_read(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1492, in _retryable_read
+    return self._retry_internal(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\_csot.py", line 107, in csot_wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1462, in _retry_internal
+    ).run()
+      ^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2315, in run
+    return self._read() if self._is_read else self._write()
+           ^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2436, in _read
+    self._server = self._get_server()
+                   ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 2399, in _get_server
+    return self._client._select_server(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1303, in _select_server
+    server = topology.select_server(server_selector)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 302, in select_server
+    server = self._select_server(selector, server_selection_timeout, address)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 286, in _select_server
+    servers = self.select_servers(selector, server_selection_timeout, address)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 237, in select_servers
+    server_descriptions = self._select_servers_loop(selector, server_timeout, address)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 2.704800639999971>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:42,148 | ERROR    | endpoints.jobs.calendar | Error processing job 68f8f74d9f66366ec044b214: No replica set members match selector "Primary()", Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: RSSecondary, rtt: 2.704800639999971>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:34:47,548 | ERROR    | endpoints.jobs.calendar | Error processing job 68f8f75a9f66366ec044b215: cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms),cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f91c0afb50cfaf6d8a0c, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:36:22,351 | ERROR    | app.core.database | ❌ Error creating database indexes: SSL handshake failed: cluster0-shard-00-02.n44j3.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8f9d95c1d056ae894b645, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('SSL handshake failed: cluster0-shard-00-02.n44j3.mongodb.net:27017: _ssl.c:983: The handshake operation timed out (configured timeouts: connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:09,143 | ERROR    | app.middleware.logging_middleware | [ea2838c1-5d88-487b-9839-54721c2cecb3] GET /api/v1/dashboard/quick-stats - ERROR - 19.55s - cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:09,156 | ERROR    | app.main        | Unhandled exception on GET /api/v1/dashboard/quick-stats: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\dashboard.py", line 145, in get_quick_stats
+    today_jobs = await db.jobs.count_documents({
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 1913, in count_documents
+    return self._retryable_non_cursor_read(_cmd, session)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 1922, in _retryable_non_cursor_read
+    with client._tmp_session(session) as s:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1840, in _tmp_session
+    s = self._ensure_session(session)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1823, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1766, in __start_session
+    self._topology._check_implicit_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 573, in _check_implicit_session_support
+    self._check_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 589, in _check_session_support
+    self._select_servers_loop(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:09,480 | ERROR    | app.middleware.logging_middleware | [707bee2c-5e10-4708-9269-ffd0cb2bc2bc] GET /api/v1/dashboard/stats - ERROR - 20.20s - cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:09,488 | ERROR    | app.main        | Unhandled exception on GET /api/v1/dashboard/stats: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\dashboard.py", line 29, in get_dashboard_stats
+    monthly_revenue_result = await db.invoices.aggregate([
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1683, in _to_list
+    result = get_more_result.result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1908, in _on_started
+    pymongo_cursor = future.result()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 2719, in aggregate
+    with self.__database.client._tmp_session(session, close=False) as s:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1840, in _tmp_session
+    s = self._ensure_session(session)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1823, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1766, in __start_session
+    self._topology._check_implicit_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 573, in _check_implicit_session_support
+    self._check_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 589, in _check_session_support
+    self._select_servers_loop(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:10,167 | ERROR    | app.middleware.logging_middleware | [1bb08fbc-da65-461b-90fd-20011c11e456] GET /api/v1/dashboard/recent-activity - ERROR - 20.87s - cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:10,189 | ERROR    | app.main        | Unhandled exception on GET /api/v1/dashboard/recent-activity: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\dashboard.py", line 119, in get_recent_activity
+    recent_jobs = await db.jobs.find({
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\motor\core.py", line 1683, in _to_list
+    result = get_more_result.result()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1155, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1823, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1766, in __start_session
+    self._topology._check_implicit_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 573, in _check_implicit_session_support
+    self._check_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 589, in _check_session_support
+    self._select_servers_loop(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-01.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:18,100 | ERROR    | dependencies.auth | 🔐 Database error: cluster0-shard-00-02.n44j3.mongodb.net:27017: connection closed (configured timeouts: connectTimeoutMS: 10000.0ms)
+2025-10-22 20:39:18,102 | ERROR    | dependencies.auth | 🔐 Database error: cluster0-shard-00-02.n44j3.mongodb.net:27017: connection closed (configured timeouts: connectTimeoutMS: 10000.0ms)
+2025-10-22 20:39:30,293 | ERROR    | app.middleware.logging_middleware | [e3ee0126-e515-4bcb-b5c8-dd8f5a6025b8] POST /api/v1/auth/login - ERROR - 5.15s - cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:39:30,341 | ERROR    | app.main        | Unhandled exception on POST /api/v1/auth/login: cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\auth.py", line 194, in login
+    user = await db.users.find_one({"email": form_data.username.lower()})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\collection.py", line 1506, in find_one
+    for result in cursor.limit(-1):
+                  ^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1264, in next
+    if len(self.__data) or self._refresh():
+                           ^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\cursor.py", line 1155, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1823, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\mongo_client.py", line 1766, in __start_session
+    self._topology._check_implicit_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 573, in _check_implicit_session_support
+    self._check_session_support()
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 589, in _check_session_support
+    self._select_servers_loop(
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\pymongo\topology.py", line 259, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms),cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f8fa77395bf4ae8cbd6899, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-00.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [Errno 11001] getaddrinfo failed (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=NetworkTimeout('cluster0-shard-00-02.n44j3.mongodb.net:27017: timed out (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>]>
+2025-10-22 20:55:39,301 | ERROR    | app.middleware.logging_middleware | [456292a9-f2d6-45c8-960f-289eec90872f] POST /api/v1/users/me/avatar - ERROR - 0.84s - cannot identify image file 'C:\\Users\\LENOVO\\3D Objects\\job\\Saas\\Backend\\uploads\\avatars\\avatar_68f7dac838d1675403f7b153_5dc24c69.temp'
+2025-10-22 20:55:39,305 | ERROR    | app.main        | Unhandled exception on POST /api/v1/users/me/avatar: cannot identify image file 'C:\\Users\\LENOVO\\3D Objects\\job\\Saas\\Backend\\uploads\\avatars\\avatar_68f7dac838d1675403f7b153_5dc24c69.temp'
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 98, in receive
+    return self.receive_nowait()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 93, in receive_nowait
+    raise WouldBlock
+anyio.WouldBlock
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 78, in call_next
+    message = await recv_stream.receive()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\anyio\streams\memory.py", line 118, in receive
+    raise EndOfStream
+anyio.EndOfStream
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\errors.py", line 162, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\middleware\logging_middleware.py", line 20, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 81, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 108, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\main.py", line 108, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 84, in call_next
+    raise app_exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\base.py", line 70, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\trustedhost.py", line 34, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 91, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\cors.py", line 146, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 79, in __call__
+    raise exc
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\middleware\exceptions.py", line 68, in __call__
+    await self.app(scope, receive, sender)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 20, in __call__
+    raise e
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 17, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 718, in __call__
+    await route.handle(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\starlette\routing.py", line 66, in app
+    response = await func(request)
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 274, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\fastapi\routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\users.py", line 313, in upload_avatar
+    avatar_url = await process_and_save_avatar(file, str(current_user["_id"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\users.py", line 285, in process_and_save_avatar
+    with Image.open(temp) as img:
+         ^^^^^^^^^^^^^^^^
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python312\Lib\site-packages\PIL\Image.py", line 3305, in open
+    raise UnidentifiedImageError(msg)
+PIL.UnidentifiedImageError: cannot identify image file 'C:\\Users\\LENOVO\\3D Objects\\job\\Saas\\Backend\\uploads\\avatars\\avatar_68f7dac838d1675403f7b153_5dc24c69.temp'
+2025-10-22 20:58:08,423 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-22 20:58:46,282 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-22 23:19:41,842 | ERROR    | app.api.v1.endpoints.customer_portal | Error formatting service 68f7ed276f0500740faad9e3: 'str' object has no attribute 'get'
+2025-10-22 23:45:08,810 | ERROR    | app.api.v1.endpoints.customer_portal | Error formatting service 68f7ed276f0500740faad9e3: 'str' object has no attribute 'get'
+2025-10-22 23:51:10,604 | ERROR    | app.api.v1.endpoints.customer_portal | Error formatting service 68f7ed276f0500740faad9e3: 'str' object has no attribute 'get'
+2025-10-22 23:57:13,761 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-22 23:57:29,570 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-22 23:57:48,142 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 00:19:35,672 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 00:22:52,101 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 00:23:43,870 | ERROR    | app.api.v1.endpoints.ws | ❌ Error processing message: name 'create_booking_from_session' is not defined
+2025-10-23 00:23:43,886 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 149, in canvas_flow_chatbot
+    booking_result = await create_booking_from_session(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'create_booking_from_session' is not defined
+
+2025-10-23 00:26:53,623 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: no close frame received or sent
+2025-10-23 00:27:03,160 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 00:27:52,076 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 01:21:30,241 | ERROR    | app.core.database | ❌ Failed to connect to MongoDB: cluster0-shard-00-01.n44j3.mongodb.net:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f93cc52f83b878953202b2, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None>]>
+2025-10-23 01:21:30,244 | ERROR    | app.main        | ❌ Failed to start application: cluster0-shard-00-01.n44j3.mongodb.net:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms), Timeout: 5.0s, Topology Description: <TopologyDescription id: 68f93cc52f83b878953202b2, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-01.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('cluster0-shard-00-01.n44j3.mongodb.net:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 10000.0ms, connectTimeoutMS: 10000.0ms)')>, <ServerDescription ('cluster0-shard-00-02.n44j3.mongodb.net', 27017) server_type: Unknown, rtt: None>]>
+2025-10-23 01:22:07,350 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: no close frame received or sent
+2025-10-23 01:22:20,202 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 01:34:35,191 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 01:34:52,327 | ERROR    | app.api.v1.endpoints.ws | ❌ Error processing message: 'NoneType' object has no attribute 'get'
+2025-10-23 01:34:52,336 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 166, in canvas_flow_chatbot
+    confirmation_message = f"Perfect! I've scheduled your appointment for {current_service if isinstance(current_service, str) else current_service.get('name', 'our service')}.\n\n" \
+                                                                                                                                    ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+2025-10-23 01:40:37,511 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 01:40:58,183 | ERROR    | app.api.v1.endpoints.ws | ❌ Error processing message: 'NoneType' object has no attribute 'get'
+2025-10-23 01:40:58,190 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 293, in canvas_flow_chatbot
+    confirmation_message = f"Perfect! I've scheduled your appointment for {current_service if isinstance(current_service, str) else current_service.get('name', 'our service')}.\n\n" \
+                                                                                                                                    ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+2025-10-23 01:43:11,715 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 01:43:52,249 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 01:49:22,594 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 02:06:53,008 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:06:53,013 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:06:53,046 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:06:53,048 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:06:54,233 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:06:54,234 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:06:54,263 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:06:54,264 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:10:31,673 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:10:31,677 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:10:32,165 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:10:32,171 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:11:30,201 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:11:30,204 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:11:30,251 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:11:30,253 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:11:30,289 | ERROR    | app.api.v1.endpoints.ws | Canvas Flow AI chatbot error: 'await' outside function (canvas_flow_ai_service.py, line 141)
+2025-10-23 02:11:30,294 | ERROR    | app.api.v1.endpoints.ws | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\ws.py", line 201, in canvas_flow_chatbot
+    from app.services.canvas_flow_ai_service import CanvasFlowAIService
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\services\canvas_flow_ai_service.py", line 141
+    flows = await self.db.conversation_flows.find({
+            ^^^^^^^^^^^^^
+SyntaxError: 'await' outside function
+
+2025-10-23 02:16:53,821 | ERROR    | app.services.canvas_flow_ai_service | Error: 'CanvasFlowAIService' object has no attribute '_analyze_intent'
+2025-10-23 02:17:04,365 | ERROR    | app.services.canvas_flow_ai_service | Error: 'CanvasFlowAIService' object has no attribute '_analyze_intent'
+2025-10-23 02:22:04,359 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 02:27:05,394 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 02:28:15,439 | ERROR    | app.api.v1.endpoints.jobs | ❌ Error sending confirmation email: 'EmailService' object has no attribute 'send_booking_confirmation'
+2025-10-23 02:28:15,444 | ERROR    | app.api.v1.endpoints.jobs | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\jobs.py", line 786, in send_booking_confirmation_email
+    email_sent = await email_service.send_booking_confirmation(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmailService' object has no attribute 'send_booking_confirmation'
+
+2025-10-23 02:34:23,355 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 02:34:43,971 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 02:35:12,079 | ERROR    | app.api.v1.endpoints.jobs | ❌ Error sending confirmation email: 'EmailService' object has no attribute 'send_booking_confirmation'
+2025-10-23 02:35:12,086 | ERROR    | app.api.v1.endpoints.jobs | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\jobs.py", line 786, in send_booking_confirmation_email
+    email_sent = await email_service.send_booking_confirmation(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmailService' object has no attribute 'send_booking_confirmation'
+
+2025-10-23 02:38:26,072 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 02:39:01,250 | ERROR    | app.api.v1.endpoints.jobs | ❌ Error sending confirmation email: 'EmailService' object has no attribute 'send_booking_confirmation'
+2025-10-23 02:39:01,275 | ERROR    | app.api.v1.endpoints.jobs | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\jobs.py", line 786, in send_booking_confirmation_email
+    email_sent = await email_service.send_booking_confirmation(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmailService' object has no attribute 'send_booking_confirmation'
+
+2025-10-23 02:45:19,306 | ERROR    | app.services.canvas_flow_ai_service | OpenAI error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************aUsA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'param': None, 'code': 'invalid_api_key'}}
+2025-10-23 02:46:11,754 | ERROR    | app.api.v1.endpoints.jobs | ❌ Error sending confirmation email: 'EmailService' object has no attribute 'send_booking_confirmation'
+2025-10-23 02:46:11,763 | ERROR    | app.api.v1.endpoints.jobs | Traceback (most recent call last):
+  File "C:\Users\LENOVO\3D Objects\job\Saas\Backend\app\api\v1\endpoints\jobs.py", line 786, in send_booking_confirmation_email
+    email_sent = await email_service.send_booking_confirmation(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'EmailService' object has no attribute 'send_booking_confirmation'
+

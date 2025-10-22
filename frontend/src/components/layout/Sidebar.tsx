@@ -77,16 +77,16 @@ const navigation: NavigationItem[] = [
       { name: 'Jobs', href: '/field-service/jobs', icon: ClipboardDocumentListIcon },
       { name: 'Technicians', href: '/field-service/technicians', icon: UsersIcon },
       { name: 'GPS Tracking', href: '/field-service/gps-tracking', icon: MapPinIcon },
-      { name: 'Mobile Workflow', href: '/field-service/mobile-workflow', icon: DevicePhoneMobileIcon },
+      // { name: 'Mobile Workflow', href: '/field-service/mobile-workflow', icon: DevicePhoneMobileIcon },
     ]
   },
   {
     name: 'Estimates & Invoicing', icon: CurrencyDollarIcon, roles: ['admin'],
     children: [
       { name: 'Estimates', href: '/estimates', icon: DocumentTextIcon },
-      { name: 'Estimate Builder', href: '/estimates/new', icon: DocumentTextIcon },
+      // { name: 'Estimate Builder', href: '/estimates/new', icon: DocumentTextIcon },
       { name: 'Invoices', href: '/invoices', icon: CurrencyDollarIcon },
-      { name: 'Invoice Generator', href: '/invoices/new', icon: CurrencyDollarIcon },
+      // { name: 'Invoice Generator', href: '/invoices/new', icon: CurrencyDollarIcon },
     ]
   },
   {
@@ -113,7 +113,7 @@ const navigation: NavigationItem[] = [
       { name: 'Service History', href: '/customer-portal/service-history', icon: ClipboardDocumentListIcon },
       { name: 'Documents', href: '/customer-portal/documents', icon: DocumentTextIcon },
       { name: 'Payments', href: '/customer-portal/payments', icon: CreditCardIcon },
-      { name: 'Payment History', href: '/customer-portal/service-history', icon: CreditCardIcon },
+      // { name: 'Payment History', href: '/customer-portal/service-history', icon: CreditCardIcon },
       { name: 'Profile', href: '/customer-portal/profile', icon: UserIcon },
     ]
   },

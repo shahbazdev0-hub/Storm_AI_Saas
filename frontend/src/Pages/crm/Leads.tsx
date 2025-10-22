@@ -121,23 +121,28 @@ export default function Leads() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<'list' | 'cards'>('list')
+  const [editingLead, setEditingLead] = useState<Lead | null>(null)
 
   const queryClient = useQueryClient()
 
   const { data: leads = [], isLoading } = useQuery({
-    queryKey: ['leads', searchTerm, statusFilter, sourceFilter, sortBy, sortOrder],
-    queryFn: async () => {
-      const params = new URLSearchParams()
-      if (searchTerm) params.append('search', searchTerm)
-      if (statusFilter !== 'all') params.append('status', statusFilter)
-      if (sourceFilter !== 'all') params.append('source', sourceFilter)
-      params.append('sort_by', sortBy)
-      params.append('sort_order', sortOrder)
-      
-      const response = await api.get(`/leads?${params.toString()}`)
-      return Array.isArray(response.data) ? response.data : []
-    },
-  })
+  queryKey: ['leads', searchTerm, statusFilter, sourceFilter, sortBy, sortOrder],
+  queryFn: async () => {
+    const params = new URLSearchParams()
+    if (searchTerm) params.append('search', searchTerm)
+    if (statusFilter !== 'all') params.append('status', statusFilter)
+    if (sourceFilter !== 'all') params.append('source', sourceFilter)
+    params.append('sort_by', sortBy)
+    params.append('sort_order', sortOrder)
+    
+    console.log('🔍 Fetching leads with params:', params.toString()) // ADD THIS
+    const response = await api.get(`/leads?${params.toString()}`)
+    console.log('✅ Leads API response:', response.data) // ADD THIS
+    console.log('📊 Total leads received:', Array.isArray(response.data) ? response.data.length : 0) // ADD THIS
+    
+    return Array.isArray(response.data) ? response.data : []
+  },
+})
 
   const createLeadMutation = useMutation({
     mutationFn: async (leadData: any) => {
@@ -167,6 +172,48 @@ export default function Leads() {
       toast.error(error.response?.data?.detail || 'Failed to update lead')
     },
   })
+
+const deleteLeadMutation = useMutation({
+  mutationFn: async (leadId: string) => {
+    await api.delete(`/leads/${leadId}`)
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['leads'] })
+    setSelectedLead(null)
+    toast.success('Lead deleted successfully!')
+  },
+  onError: (error: any) => {
+    toast.error(error.response?.data?.detail || 'Failed to delete lead')
+  },
+})
+
+const updateLeadMutation = useMutation({
+  mutationFn: async ({ leadId, leadData }: { leadId: string; leadData: any }) => {
+    const response = await api.patch(`/leads/${leadId}`, leadData)
+    return response.data
+  },
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['leads'] })
+    setEditingLead(null)
+    toast.success('Lead updated successfully!')
+  },
+  onError: (error: any) => {
+    toast.error(error.response?.data?.detail || 'Failed to update lead')
+  },
+})
+
+
+const handleUpdateLead = (leadData: any) => {
+  if (editingLead) {
+    updateLeadMutation.mutate({ leadId: editingLead.id, leadData })
+  }
+}
+
+const handleDeleteLead = (leadId: string) => {
+  if (window.confirm('Are you sure you want to delete this lead? This action cannot be undone.')) {
+    deleteLeadMutation.mutate(leadId)
+  }
+}
 
   const handleCreateLead = (leadData: any) => {
     createLeadMutation.mutate(leadData)
@@ -726,6 +773,24 @@ export default function Leads() {
         />
       </Modal>
 
+
+{/* Edit Lead Modal */}
+<Modal
+  isOpen={!!editingLead}
+  onClose={() => setEditingLead(null)}
+  title="Edit Lead"
+  size="lg"
+>
+  {editingLead && (
+    <LeadForm
+      initialData={editingLead}
+      onSubmit={handleUpdateLead}
+      onCancel={() => setEditingLead(null)}
+      isLoading={updateLeadMutation.isPending}
+    />
+  )}
+</Modal>
+
       {/* Lead Details Modal */}
       {selectedLead && (
         <Modal
@@ -838,8 +903,8 @@ export default function Leads() {
               </div>
             )}
             
-            <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200">
-              <button
+            {/* <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200"> */}
+              {/* <button
                 onClick={() => setSelectedLead(null)}
                 className="w-full sm:w-auto bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
@@ -847,9 +912,38 @@ export default function Leads() {
               </button>
               <button className="w-full sm:w-auto inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                 Edit Lead
-              </button>
-            </div>
+              </button> */}
+            {/* </div> */}
           </div>
+          <div className="flex flex-col sm:flex-row sm:justify-between space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t border-gray-200">
+  {/* Left side - Delete button */}
+  <button
+    onClick={() => handleDeleteLead(selectedLead.id)}
+    disabled={deleteLeadMutation.isPending}
+    className="w-full sm:w-auto bg-white py-2 px-4 border border-red-300 rounded-md shadow-sm text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
+  >
+    {deleteLeadMutation.isPending ? 'Deleting...' : 'Delete Lead'}
+  </button>
+  
+  {/* Right side - Close and Edit buttons */}
+  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+    <button
+      onClick={() => setSelectedLead(null)}
+      className="w-full sm:w-auto bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
+    >
+      Close
+    </button>
+    <button 
+      onClick={() => {
+        setEditingLead(selectedLead)
+        setSelectedLead(null)
+      }}
+      className="w-full sm:w-auto inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+    >
+      Edit Lead
+    </button>
+  </div>
+</div>
         </Modal>
       )}
     </div>

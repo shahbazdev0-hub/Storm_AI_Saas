@@ -1,7 +1,7 @@
-# backend/app/api/v1/endpoints/auth.py
+# backend/app/api/v1/endpoints/auth.py - PERMANENT FIX
 
 from bson import ObjectId
-from fastapi import APIRouter, Depends, HTTPException, status,Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from datetime import datetime, timedelta
@@ -13,20 +13,18 @@ from app.core.config import settings
 from app.core import security
 from app.core.logger import get_logger
 from app.dependencies.auth import get_current_user
-from app.utils.user_serializer import serialize_user  # ✅ central serializer
+from app.utils.user_serializer import serialize_user
 
 router = APIRouter()
 logger = get_logger("auth")
-# ADD THESE IMPORTS (if not already present)
 
 from typing import Any, Dict, List
 import stripe
-from app.core.config import settings
 
 # Initialize Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# ADD THESE PYDANTIC MODELS (after your imports, before your endpoints)
+# Pydantic Models
 class SubscriptionUpdateRequest(BaseModel):
     plan_id: str
     billing_cycle: str = "monthly"
@@ -40,18 +38,14 @@ class SubscriptionResponse(BaseModel):
     features: List[str]
     expires_at: datetime
     created_at: datetime
-# -------------------------------
-# Schemas
-# -------------------------------
+
 class RegisterRequest(BaseModel):
     email: EmailStr
     password: str
     first_name: str
     last_name: str
 
-# -------------------------------
-# Password utils
-# -------------------------------
+# Password utilities
 def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
@@ -62,32 +56,85 @@ def verify_password(password: str, hashed: str) -> bool:
 def get_password_from_user(user_doc: dict) -> str:
     return user_doc.get("hashed_password") or user_doc.get("password_hash") or ""
 
-# -------------------------------
-# Register (customer only)
-# -------------------------------
+
+# ========================================
+# ✅ HELPER FUNCTION TO GET MASTER COMPANY ID
+# ========================================
+async def get_master_company_id(db: AsyncIOMotorDatabase) -> ObjectId:
+    """
+    Get the master company ID for the system.
+    This ensures ALL users belong to the same company.
+    
+    Priority:
+    1. Find the first admin user's company_id
+    2. If no admin exists, find the first company in companies collection
+    3. If no company exists, create a default company
+    """
+    try:
+        # Option 1: Get company_id from first admin
+        admin_user = await db.users.find_one(
+            {"role": "admin", "status": "active"},
+            sort=[("created_at", 1)]  # Get oldest admin
+        )
+        
+        if admin_user and admin_user.get("company_id"):
+            logger.info(f"✅ Using admin's company_id: {admin_user['company_id']}")
+            return admin_user["company_id"]
+        
+        # Option 2: Get first company from companies collection
+        company = await db.companies.find_one({}, sort=[("created_at", 1)])
+        if company and company.get("_id"):
+            logger.info(f"✅ Using first company from DB: {company['_id']}")
+            return company["_id"]
+        
+        # Option 3: Create a default master company
+        logger.warning("⚠️ No company found! Creating default master company...")
+        default_company = {
+            "name": "Master Company",
+            "type": "master",
+            "status": "active",
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow(),
+            "settings": {
+                "timezone": "UTC",
+                "currency": "USD",
+                "date_format": "MM/DD/YYYY"
+            }
+        }
+        result = await db.companies.insert_one(default_company)
+        logger.info(f"✅ Created default company: {result.inserted_id}")
+        return result.inserted_id
+        
+    except Exception as e:
+        logger.error(f"❌ Error getting master company ID: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to determine company. Please contact support."
+        )
+
+
+# ========================================
+# ✅ REGISTER ENDPOINT - FIXED
+# ========================================
 @router.post("/register")
 async def register(
     user_data: RegisterRequest,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ) -> Any:
+    """Register a new customer with proper company_id handling"""
     logger.info(f"🔥 Registering new customer: {user_data.email}")
 
+    # Check if user exists
     existing_user = await db.users.find_one({"email": user_data.email.lower()})
     if existing_user:
         raise HTTPException(status_code=400, detail="User with this email already exists")
 
-    # Always create a company
-    company_doc = {
-        "name": f"{user_data.first_name} {user_data.last_name} - Customer",
-        "industry": "customer",
-        "status": "active",
-        "created_at": datetime.utcnow(),
-        "updated_at": datetime.utcnow(),
-    }
-    company_result = await db.companies.insert_one(company_doc)
-    company_id = company_result.inserted_id
+    # ✅ FIX: Get the master company ID (same for ALL users)
+    company_id = await get_master_company_id(db)
+    
+    logger.info(f"✅ Assigning customer to company: {company_id}")
 
-    # Create user
+    # Create user document
     user_doc = {
         "email": user_data.email.lower(),
         "first_name": user_data.first_name,
@@ -95,7 +142,7 @@ async def register(
         "hashed_password": hash_password(user_data.password),
         "role": "customer",
         "status": "active",
-        "company_id": company_id,
+        "company_id": company_id,  # ✅ CRITICAL: Same company for all users
         "permissions": ["read", "customer_portal"],
         "is_superuser": False,
         "is_email_verified": False,
@@ -113,13 +160,14 @@ async def register(
         "updated_at": datetime.utcnow(),
         "last_login": None,
     }
+    
     user_result = await db.users.insert_one(user_doc)
     user_id = user_result.inserted_id
 
-    # Serialize
+    # Serialize response
     user_response = serialize_user({**user_doc, "_id": user_id, "company_id": company_id})
 
-    # Tokens
+    # Generate tokens
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     response = {
         "user": user_response,
@@ -129,12 +177,13 @@ async def register(
         "expires_in": int(access_token_expires.total_seconds()),
     }
 
-    logger.info(f"🎉 Customer registration successful for {user_data.email}")
+    logger.info(f"🎉 Customer registered successfully: {user_data.email} → Company: {company_id}")
     return response
 
-# -------------------------------
-# Login (all roles)
-# -------------------------------
+
+# ========================================
+# LOGIN ENDPOINT (unchanged but included for completeness)
+# ========================================
 @router.post("/login")
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
@@ -175,12 +224,10 @@ async def login(
     logger.info(f"🎉 Login successful for {user['email']} (role: {user.get('role')})")
     return response
 
-# -------------------------------
-# Current user
-# -------------------------------
-# -------------------------------
-# Current user - ✅ FIXED to fetch fresh data from DB
-# -------------------------------
+
+# ========================================
+# GET CURRENT USER
+# ========================================
 @router.get("/me")
 async def get_current_user_info(
     current_user: dict = Depends(get_current_user),
@@ -188,7 +235,6 @@ async def get_current_user_info(
 ) -> Any:
     """Get current user with latest data including subscription"""
     try:
-        # ✅ Fetch fresh user data from database (includes subscription)
         user_id = ObjectId(current_user["_id"])
         fresh_user = await db.users.find_one({"_id": user_id})
         
@@ -196,18 +242,88 @@ async def get_current_user_info(
             logger.error(f"❌ User not found in database: {user_id}")
             raise HTTPException(status_code=404, detail="User not found")
         
-        # ✅ Serialize and return (includes subscription)
         user_response = serialize_user(fresh_user)
         
-        logger.info(f"✅ /me endpoint called for {fresh_user.get('email')} - Subscription: {fresh_user.get('subscription', {}).get('status', 'none')}")
+        logger.info(f"✅ /me endpoint: {fresh_user.get('email')} - Company: {fresh_user.get('company_id')}")
         
         return user_response
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"❌ Error fetching user data: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to fetch user data")
+        logger.error(f"❌ Error in /me endpoint: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ========================================
+# ✅ DATA MIGRATION ENDPOINT (ONE-TIME USE)
+# ========================================
+@router.post("/admin/fix-company-ids")
+async def fix_all_company_ids(
+    current_user: dict = Depends(get_current_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+) -> Dict[str, Any]:
+    """
+    ONE-TIME MIGRATION: Fix all users to have the same company_id as admin.
+    THIS SHOULD ONLY BE RUN ONCE BY AN ADMIN USER.
+    """
+    # Security check - only admins can run this
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can run this migration")
+    
+    logger.warning("🚨 MIGRATION STARTED: Fixing company_ids for all users")
+    
+    try:
+        # Get the master company ID
+        master_company_id = await get_master_company_id(db)
+        
+        # Find all users with different company_ids
+        wrong_users = await db.users.find(
+            {"company_id": {"$ne": master_company_id}}
+        ).to_list(length=None)
+        
+        if not wrong_users:
+            return {
+                "status": "success",
+                "message": "All users already have correct company_id",
+                "master_company_id": str(master_company_id),
+                "users_fixed": 0
+            }
+        
+        # Update all users to have the correct company_id
+        result = await db.users.update_many(
+            {"company_id": {"$ne": master_company_id}},
+            {"$set": {
+                "company_id": master_company_id,
+                "updated_at": datetime.utcnow()
+            }}
+        )
+        
+        logger.info(f"✅ MIGRATION COMPLETE: Fixed {result.modified_count} users")
+        
+        return {
+            "status": "success",
+            "message": f"Successfully fixed company_id for {result.modified_count} users",
+            "master_company_id": str(master_company_id),
+            "users_fixed": result.modified_count,
+            "users_found_with_wrong_id": len(wrong_users),
+            "fixed_users": [
+                {
+                    "email": u.get("email"),
+                    "role": u.get("role"),
+                    "old_company_id": str(u.get("company_id"))
+                }
+                for u in wrong_users[:10]  # Show first 10
+            ]
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ MIGRATION FAILED: {e}")
+        raise HTTPException(status_code=500, detail=f"Migration failed: {str(e)}")
+
+
+# Keep the rest of your endpoints (subscription, payment, etc.)
+# ... (include your other endpoints here)
 
 # -------------------------------
 # Logout
@@ -325,36 +441,20 @@ async def google_oauth_callback(
             last_name = name_parts[1] if len(name_parts) > 1 else ""
             
             # Create company for the new user
-            company_id = ObjectId()
-            company_doc = {
-                "_id": company_id,
-                "name": f"{first_name}'s Company",
-                "industry": "Other",
-                "size": "1-10",
-                "phone": "",
-                "address": {},
-                "settings": {
-                    "timezone": "UTC",
-                    "currency": "USD",
-                    "date_format": "MM/DD/YYYY",
-                    "business_hours": {
-                        "monday": {"start": "09:00", "end": "17:00"},
-                        "tuesday": {"start": "09:00", "end": "17:00"},
-                        "wednesday": {"start": "09:00", "end": "17:00"},
-                        "thursday": {"start": "09:00", "end": "17:00"},
-                        "friday": {"start": "09:00", "end": "17:00"}
-                    }
-                },
-                "subscription": {
-                    "plan": "basic",
-                    "status": "trial",
-                    "trial_ends_at": datetime.utcnow() + timedelta(days=14)
-                },
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()
-            }
-            
-            await db.companies.insert_one(company_doc)
+          # ✅ FIXED: Use main company instead of creating new one
+        admin_user = await db.users.find_one({"role": "admin", "status": "active"})
+        if admin_user and admin_user.get("company_id"):
+            company_id = admin_user.get("company_id")
+            logger.info(f"✅ Google OAuth - Using existing admin company: {company_id}")
+        else:
+            company_id = ObjectId("68af46dab1355f0072ad6fa1")  # Your admin's company
+            logger.info(f"✅ Google OAuth - Using default company: {company_id}")
+
+# Convert to ObjectId if needed
+        if isinstance(company_id, str):
+            company_id = ObjectId(company_id)
+
+# NO company creation here - just use the existing one!
             
             # Create user document
             user_id = ObjectId()
@@ -591,260 +691,7 @@ from app.core.config import settings
 # Initialize Stripe with YOUR secret key from .env
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# ===== ADD THESE HELPER FUNCTIONS =====
-
-# async def get_or_create_stripe_customer(user_data: dict, db: AsyncIOMotorDatabase):
-#     """Get or create Stripe customer for user"""
-#     try:
-#         # Check if user already has a Stripe customer ID
-#         user_id = ObjectId(user_data["_id"])
-#         user = await db.users.find_one({"_id": user_id})
-        
-#         if user and user.get("stripe_customer_id"):
-#             # Return existing Stripe customer
-#             return stripe.Customer.retrieve(user["stripe_customer_id"])
-        
-#         # Create new Stripe customer
-#         stripe_customer = stripe.Customer.create(
-#             email=user_data["email"],
-#             name=f"{user_data['first_name']} {user_data['last_name']}",
-#             metadata={
-#                 "user_id": str(user_id),
-#                 "company_id": str(user_data.get("company_id", ""))
-#             }
-#         )
-        
-#         # Save Stripe customer ID to user record
-#         await db.users.update_one(
-#             {"_id": user_id},
-#             {"$set": {"stripe_customer_id": stripe_customer.id}}
-#         )
-        
-#         return stripe_customer
-        
-#     except Exception as e:
-#         logger.error(f"❌ Error creating Stripe customer: {e}")
-#         raise HTTPException(status_code=500, detail=f"Failed to create payment customer: {str(e)}")
-
-# # ===== REPLACE YOUR EXISTING update_subscription ENDPOINT WITH THIS =====
-# # ADD TO: backend/app/api/v1/endpoints/auth.py
-
-# # UPDATED SUBSCRIPTION ENDPOINT WITH REAL STRIPE INTEGRATION
-
-# @router.post("/subscription/update")
-# async def update_subscription(
-#     request: SubscriptionUpdateRequest,
-#     current_user: dict = Depends(get_current_user),
-#     db: AsyncIOMotorDatabase = Depends(get_database)
-# ) -> Dict[str, Any]:
-#     """Create subscription with Stripe payment"""
-#     try:
-#         user_id = ObjectId(current_user["_id"])
-        
-#         # Plan definitions (you'll need to create these prices in Stripe Dashboard)
-#         plans = {
-#             "starter": {
-#                 "name": "Starter",
-#                 "monthly_price": 39,
-#                 "yearly_price": 375,
-#                 "stripe_monthly_price_id": "price_1SDaaKCcX0FmDNEaqwD3MVKd",  # ⚠️ REPLACE WITH YOUR ACTUAL STRIPE PRICE ID
-#                 "stripe_yearly_price_id": "price_1SDaaKCcX0FmDNEaloarw6Xh",   # ⚠️ REPLACE WITH YOUR ACTUAL STRIPE PRICE ID
-#                 "features": [
-#                     "Contact & Lead Management",
-#                     "Estimate & Invoice Builder",
-#                     "Sales Dashboard & Conversion Reports",
-#                     "QuickBooks + Google Calendar Sync",
-#                     "Job Scheduling Calendar",
-#                     "Customer Notes & History",
-#                     "Customer Portal Access",
-#                     "Zapier Hooks + Custom AI Workflows",
-#                     "Email Notifications"
-#                 ]
-#             },
-#             "growth": {
-#                 "name": "Growth",
-#                 "monthly_price": 79,
-#                 "yearly_price": 759,
-#                 "stripe_monthly_price_id": "price_1SDaceCcX0FmDNEaGVdmWpdX",  # ⚠️ REPLACE WITH YOUR ACTUAL STRIPE PRICE ID
-#                 "stripe_yearly_price_id": "price_1SDad4CcX0FmDNEax5pbyQqB",   # ⚠️ REPLACE WITH YOUR ACTUAL STRIPE PRICE ID
-#                 "features": [
-#                     "Everything in Starter",
-#                     "AI-Powered SMS Assistant",
-#                     "Route Optimization",
-#                     "Technician Assignment",
-#                     "Role-Based User Permissions",
-#                     "Document Review & Management",
-#                     "Team & Department Reporting"
-#                 ]
-#             }
-#         }
-        
-#         if request.plan_id not in plans:
-#             raise HTTPException(status_code=400, detail="Invalid plan ID")
-        
-#         plan = plans[request.plan_id]
-        
-#         # Get or create Stripe customer
-#         stripe_customer = await get_or_create_stripe_customer(current_user, db)
-        
-#         # Select Stripe Price ID
-#         price_id = (plan["stripe_yearly_price_id"] 
-#                    if request.billing_cycle == "yearly" 
-#                    else plan["stripe_monthly_price_id"])
-        
-#         # Create Stripe subscription with trial
-#         stripe_subscription = stripe.Subscription.create(
-#             customer=stripe_customer.id,
-#             items=[{"price": price_id}],
-#             trial_period_days=7,  # 7-day free trial
-#             payment_behavior="default_incomplete",
-#             payment_settings={"save_default_payment_method": "on_subscription"},
-#             expand=["latest_invoice.payment_intent"],
-#             metadata={
-#                 "user_id": str(user_id),
-#                 "plan_id": request.plan_id,
-#                 "billing_cycle": request.billing_cycle
-#             }
-#         )
-        
-#         # Calculate subscription period
-#         if request.billing_cycle == "yearly":
-#             expires_at = datetime.utcnow() + timedelta(days=365)
-#         else:
-#             expires_at = datetime.utcnow() + timedelta(days=30)
-        
-#         # Create subscription in database
-#         subscription = {
-#             "plan_id": request.plan_id,
-#             "plan_name": plan["name"],
-#             "status": "trialing",  # 7-day trial starts immediately
-#             "billing_cycle": request.billing_cycle,
-#             "price": plan["yearly_price"] if request.billing_cycle == "yearly" else plan["monthly_price"],
-#             "features": plan["features"],
-#             "stripe_subscription_id": stripe_subscription.id,
-#             "stripe_customer_id": stripe_customer.id,
-#             "trial_end": datetime.utcnow() + timedelta(days=7),
-#             "expires_at": expires_at,
-#             "created_at": datetime.utcnow(),
-#             "updated_at": datetime.utcnow()
-#         }
-        
-#         # Update user with subscription
-#         await db.users.update_one(
-#             {"_id": user_id},
-#             {
-#                 "$set": {
-#                     "subscription": subscription,
-#                     "updated_at": datetime.utcnow()
-#                 }
-#             }
-#         )
-        
-#         # Get payment intent for frontend
-#         payment_intent = stripe_subscription.latest_invoice.payment_intent
-        
-#         logger.info(f"✅ Subscription created for {current_user['email']} - Plan: {plan['name']}")
-        
-#         return {
-#             "message": f"Successfully subscribed to {plan['name']} plan",
-#             "subscription": subscription,
-#             "requires_payment": True,
-#             "client_secret": payment_intent.client_secret,
-#             "stripe_subscription_id": stripe_subscription.id,
-#             "trial_days": 7
-#         }
-        
-#     except stripe.error.StripeError as e:
-#         logger.error(f"❌ Stripe error: {e}")
-#         raise HTTPException(status_code=400, detail=f"Payment processing failed: {str(e)}")
-#     except Exception as e:
-#         logger.error(f"❌ Error creating subscription: {e}")
-#         raise HTTPException(status_code=500, detail="Failed to create subscription")
-
-
-
-
-# @router.post("/subscription/update")
-# async def update_subscription(
-#     request: SubscriptionUpdateRequest,
-#     current_user: dict = Depends(get_current_user),
-#     db: AsyncIOMotorDatabase = Depends(get_database)
-# ) -> Dict[str, Any]:
-#     try:
-#         user_id = ObjectId(current_user["_id"])
-        
-#         plans = {
-#             "starter": {
-#                 "name": "Starter",
-#                 "monthly_price": 39,
-#                 "yearly_price": 375,
-#                 "features": [
-#                     "Contact & Lead Management",
-#                     "Estimate & Invoice Builder",
-#                     "Sales Dashboard & Conversion Reports",
-#                     "QuickBooks + Google Calendar Sync",
-#                     "Job Scheduling Calendar",
-#                     "Customer Notes & History",
-#                     "Customer Portal Access",
-#                     "Zapier Hooks + Custom AI Workflows",
-#                     "Email Notifications"
-#                 ]
-#             },
-#             "growth": {
-#                 "name": "Growth",
-#                 "monthly_price": 79,
-#                 "yearly_price": 759,
-#                 "features": [
-#                     "Everything in Starter",
-#                     "AI-Powered SMS Assistant",
-#                     "Route Optimization",
-#                     "Technician Assignment",
-#                     "Role-Based User Permissions",
-#                     "Document Review & Management",
-#                     "Team & Department Reporting"
-#                 ]
-#             }
-#         }
-        
-#         if request.plan_id not in plans:
-#             raise HTTPException(status_code=400, detail="Invalid plan")
-        
-#         plan = plans[request.plan_id]
-#         price = plan["yearly_price"] if request.billing_cycle == "yearly" else plan["monthly_price"]
-        
-#         subscription = {
-#             "plan_id": request.plan_id,
-#             "plan_name": plan["name"],
-#             "status": "active",
-#             "billing_cycle": request.billing_cycle,
-#             "price": price,
-#             "features": plan["features"],
-#             "expires_at": datetime.utcnow() + timedelta(days=365 if request.billing_cycle == "yearly" else 30),
-#             "created_at": datetime.utcnow(),
-#             "updated_at": datetime.utcnow()
-#         }
-        
-#         await db.users.update_one(
-#             {"_id": user_id},
-#             {"$set": {"subscription": subscription, "updated_at": datetime.utcnow()}}
-#         )
-        
-#         logger.info(f"Subscription updated for {current_user['email']} to {plan['name']}")
-        
-#         return {
-#             "message": f"Successfully subscribed to {plan['name']}",
-#             "subscription": subscription,
-#             "success": True
-#         }
-        
-#     except HTTPException:
-#         raise
-#     except Exception as e:
-#         logger.error(f"Error: {e}")
-#         raise HTTPException(status_code=500, detail=str(e))
-
-
-        
+#     
 # ADD PAYMENT CONFIRMATION ENDPOINT
 @router.post("/subscription/confirm-payment")
 async def confirm_payment(

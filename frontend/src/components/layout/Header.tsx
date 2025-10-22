@@ -322,13 +322,13 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
                 {/* Menu Items */}
                 <div className="py-1">
-                  <button 
+                  {/* <button 
                     onClick={handleProfileClick}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <UserCircleIcon className="h-4 w-4 mr-3 text-gray-400" />
                     Your Profile
-                  </button>
+                  </button> */}
                   <button 
                     onClick={handleSettingsClick}
                     className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"

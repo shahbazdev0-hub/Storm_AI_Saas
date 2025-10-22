@@ -307,6 +307,7 @@ class EmailService:
         except Exception as e:
             logger.error(f"❌ Error tracking email open: {e}")
             return False
+
     
     async def track_email_click(
         self,
@@ -921,6 +922,81 @@ class EmailService:
             )
         except Exception as e:
             logger.error(f"❌ Error handling contact bounce: {e}")
+async def send_booking_confirmation(
+    self,
+    customer_email: str,
+    customer_name: str,
+    service_type: str,
+    location: str = "To be confirmed",
+    scheduled_time: str = "To be confirmed",
+    booking_id: str = "",
+    admin_notes: str = ""
+) -> bool:
+    """Send booking confirmation email to customer"""
+    try:
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+
+        logger.info(f"📧 Preparing confirmation email for {customer_email}")
+
+        subject = f"✅ Booking Confirmed - {service_type}"
+
+        # Simple HTML email
+        html_body = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2 style="color: #4F46E5;">🎉 Booking Confirmed!</h2>
+
+            <p>Dear {customer_name},</p>
+
+            <p>Great news! Your booking has been confirmed by our team.</p>
+
+            <div style="background: #f0f9ff; padding: 20px; border-left: 4px solid #4F46E5; margin: 20px 0;">
+                <h3 style="margin-top: 0;">Booking Details</h3>
+                <p><strong>Service:</strong> {service_type}</p>
+                <p><strong>Location:</strong> {location}</p>
+                <p><strong>Time:</strong> {scheduled_time}</p>
+                <p><strong>Booking ID:</strong> {booking_id}</p>
+                {f'<div style="margin-top: 15px; padding: 10px; background: #FEF3C7; border-radius: 4px;"><strong>Admin Note:</strong> {admin_notes}</div>' if admin_notes else ''}
+            </div>
+
+            <p>Our team will contact you within 24 hours to finalize details.</p>
+
+            <p>Best regards,<br><strong>Your Service Team</strong></p>
+        </body>
+        </html>
+        """
+
+        # Create message
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = f"Service Team <{settings.EMAIL_USER}>"
+        msg['To'] = customer_email
+
+        # Attach HTML
+        msg.attach(MIMEText(html_body, 'html'))
+
+        # Use a thread to run the blocking SMTP operations to avoid blocking the event loop
+        def _send():
+            logger.info(f"📧 Connecting to SMTP: {settings.EMAIL_HOST}:{settings.EMAIL_PORT}")
+            with smtplib.SMTP(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
+                server.starttls()
+                logger.info(f"📧 Logging in as: {settings.EMAIL_USER}")
+                server.login(settings.EMAIL_USER, settings.EMAIL_PASSWORD)
+                server.send_message(msg)
+
+        await asyncio.to_thread(_send)
+
+        logger.info(f"✅ Confirmation email sent to {customer_email}")
+        return True
+
+    except Exception as e:
+        logger.error(f"❌ Failed to send confirmation email: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        return False
+
 
 # Export the service
 __all__ = ["EmailService"]
